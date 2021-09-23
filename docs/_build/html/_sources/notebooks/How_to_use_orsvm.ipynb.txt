@@ -1,0 +1,495 @@
+{
+ "cells": [
+  {
+   "cell_type": "markdown",
+   "id": "c618db70-16de-412a-8a68-9adc08782a6d",
+   "metadata": {},
+   "source": [
+    "# Fit a model"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 5,
+   "id": "bf2d7f22-5850-4c26-9dbc-5b265d786eaa",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "import orsvm\n",
+    "import pandas as pd\n",
+    "import numpy as np"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "5834a167-93df-4705-90e2-351f3e640e78",
+   "metadata": {},
+   "source": [
+    "## Load data-set"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 6,
+   "id": "150eb4cc-fa16-4680-ad1b-c091cc2fa813",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# Fitting a model requires the data-set to be prepared, in order to be a binary classification.\n",
+    "\n",
+    "df = pd.read_csv(r'D:\\Dev\\Orthogonal_Polynomials\\Datasets\\monks\\1_monks.train',\n",
+    "                names=['label','col1','col2','col3',\n",
+    "                        'col4','col5','col6'],index_col=False)\n",
+    "\n",
+    "df.loc[df.label==0, ['label']] = -1    # map \"0\" to \"-1\"\n",
+    "y_train=df['label'].to_numpy()         # convert y_train to numpy array\n",
+    "df.drop('label', axis=1, inplace=True) # drop the class label\n",
+    "X_train=df.to_numpy()                  # convert x_train to numpy array\n",
+    "\n",
+    "\n",
+    "# load test-set\n",
+    "df = pd.read_csv(r'D:\\Dev\\Orthogonal_Polynomials\\Datasets\\monks\\1_monks.test',\n",
+    "                    names=['label','col1','col2','col3',\n",
+    "                            'col4','col5','col6'],index_col=False)\n",
+    "df.loc[df.label==0, ['label']] = -1\n",
+    "y_test=df['label'].to_numpy()\n",
+    "df.drop('label', axis=1, inplace=True)\n",
+    "X_test=df.to_numpy()"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "24673a2c-655a-41fb-b49b-1cb959556757",
+   "metadata": {},
+   "source": [
+    "## Initialize a model"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "894d1542-e53d-4da4-9ba7-506897f20c64",
+   "metadata": {},
+   "source": [
+    "Initializing a model is straight forward:\n",
+    "1. import orsvm\n",
+    "2. call Model class from orsvm by passing the kernel name and related parameters.\n",
+    "\n",
+    "\n",
+    "Required parameters are related to the chosen kernel. \n",
+    "`Model` receives following parameters:\n",
+    "1. **kernel**, of type `String`, and is the kernel name and currently possible value are: `Chebyshev`, `Legendre`, `Gegenbauer`, `Jacobi`.\n",
+    "2. **order**,of type `int`, and is the order of orthogonal kernel function.\n",
+    "3. **T**, of type `float`, and is the order transformation a.k.a. fractionality order. Valid range is `(0,1]`, as if it's less then 1, that's the fractional form of the kernel of fractional order of equal to T.\n",
+    "4. **param1**, of type `float`, and is only applicable for `Jacobi` and `Gegenbauer` kernels. In case of `jacobi` it refers to `psi` and in case of `Gegenbauer` it refers to `lambda`. Valid range is greater than -1.\n",
+    "5. **param2**, of type `float`, and is only applicable to `Jacobi` kernel and refers to second hyperparameter of that kernel `omega`. Valid range is greater than -1.\n",
+    "6. **svd**, of types  `int` , `scientific number` ,`char`.\n",
+    "    1. `int`, User chooses how many of Lagrange multipliers, consider to be support vectors.\n",
+    "    2. `scientific number`, User may choose a minimun threshold to choose support vectors from Lagrange multipliers. In this case, the passed argument must be in scientific notation for example 1e-3, chooses all Lagrange multipliers that are greater than '1e-3'(0.001)\n",
+    "    3. `a`, represents the average, ORSVM will compute the average of scientific notation of the scale that Lagrange Multipliers are in, and sets as the criteria to select the ones that are greater than average. Choosing the \"average\" may cause most of Lagrange Multipliers to be selected as Support Vectors! And this may lead to poor generalization of the fitting result! but the benefit of this one is whenever the user may not know how to choose the threshold, in this case, choosing the wrong threshold may outcomes 0 Support Vectors, therefore setting svd = 'a' for the first fitting attempt gives an intuition to choose the best value.\n",
+    "7. `form`, of type char, can be one of 'r' or 'e', for recursive and explicit, respectively. Only applicable to Chebyshev kernel.\n",
+    "8. `c`, of type int, Is the regulization parametr is SVM algorithm. The default is None. Possible values: 10, 100, 1000 \n",
+    "9. `noise`, A noise  only applicable to weight function of Jacobi kernel. recommended values can be 0.1, 0.01,...\n",
+    "     \n",
+    "     \n",
+    "According to selected kernel, user may pass related parameters.\n",
+    "For an example here we'll initiate the model with Legendre kernel, that only reuires order and T."
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "5ce1a876-b76b-44f3-a8e5-bb2614270c88",
+   "metadata": {},
+   "source": [
+    "## Kernel Initialization"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 16,
+   "id": "46284f46-b26d-4d75-a699-74b3ef35353a",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# Create an object from Model class of ORSVM\n",
+    "obj=orsvm.Model(kernel=\"Legendre\",order=4,T=0.3)  "
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "7ff65175-6804-4cfd-a1a0-accb5fa0d852",
+   "metadata": {},
+   "source": [
+    "## Fit the model and Capture paramaters"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "05b30635-91ba-4662-a42a-42665f486bf9",
+   "metadata": {},
+   "source": [
+    "Fitting the model happens through calling the `ModelFit` function of initiated object.\n",
+    "Returns of this function can be captured using 3 variables."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 8,
+   "id": "eed27b23-7f18-45ca-b151-117594f437ac",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "********** 20/09/2021 22:45:35 **********\n",
+      "** OSVM kernel: Legendre\n",
+      "** Order: 4\n",
+      "** Fractional mode, transition : 0.3\n",
+      "** Avegage support vector determiner selected!\n",
+      "** sv threshold: 10^ -6\n"
+     ]
+    }
+   ],
+   "source": [
+    "# fit the model and Capture parameters\n",
+    "Weights, SupportVectors, Bias, KernelInstance = obj.ModelFit(X_train,y_train)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "8dcf8119-1590-4cdc-a1b2-eca70a41c6c4",
+   "metadata": {},
+   "source": [
+    "### Weight array "
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 9,
+   "id": "f8fe1582-e852-412f-a6b7-888015cc0a44",
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "array([4.31616233e-05, 3.89142170e-05, 3.17406317e-04, 1.21298781e-03,\n",
+       "       2.26153630e-03, 9.46278728e-04, 4.48721425e-04, 1.55539798e-04,\n",
+       "       1.76994177e-03, 9.74950658e-04, 6.60982882e-05, 3.33188669e-03,\n",
+       "       1.17478909e-03, 1.36909791e-03, 1.91821866e-03, 9.56413563e-05,\n",
+       "       6.20364081e-05, 1.47440492e-03, 5.30630721e-04, 1.09339305e-04,\n",
+       "       5.52046728e-04, 2.80712857e-03, 2.65326106e-03, 6.43361900e-04,\n",
+       "       4.82953952e-04, 2.39357351e-03, 1.28777105e-06, 1.65828539e-04,\n",
+       "       1.51709459e-04, 9.23363273e-03, 2.05142062e-02, 1.10989496e-01,\n",
+       "       2.55213384e-02, 9.59451474e-03, 3.29399755e-03, 1.03252221e-03,\n",
+       "       1.99687458e-02, 9.61922898e-02, 6.46303906e-04, 5.39030946e-04,\n",
+       "       1.58653037e-02, 2.79692699e-02, 2.47487466e-04, 1.03700941e-03,\n",
+       "       4.04852964e-04, 1.31887063e-04, 3.99202585e-04, 2.52186718e-02,\n",
+       "       8.14330077e-04, 1.03097010e-01, 6.38327703e-04, 1.27344896e-02,\n",
+       "       6.66340171e-03, 8.89939033e-05, 1.92628687e-02, 4.75350555e-03,\n",
+       "       1.77760937e-03, 8.99825443e-02, 1.02012638e-03, 1.34319496e-02,\n",
+       "       1.06050364e-02, 5.91328073e-03])"
+      ]
+     },
+     "execution_count": 9,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "Weights"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "4127e3d4-7302-4a09-8288-141ffc71d7d4",
+   "metadata": {},
+   "source": [
+    "### Support Vectors"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 12,
+   "id": "661cf2fd-b7a8-42b0-843c-a1bed53cb9d2",
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "array([[-1.        , -1.        , -1.        , -1.        ,  0.77093499,\n",
+       "        -1.        ],\n",
+       "       [-1.        , -1.        , -1.        , -1.        ,  0.77093499,\n",
+       "         0.43844619],\n",
+       "       [-1.        , -1.        , -1.        ,  0.77093499,  0.43844619,\n",
+       "        -1.        ],\n",
+       "       [-1.        , -1.        , -1.        ,  0.77093499,  0.77093499,\n",
+       "         0.43844619],\n",
+       "       [-1.        , -1.        ,  0.43844619, -1.        ,  0.43844619,\n",
+       "         0.43844619],\n",
+       "       [-1.        , -1.        ,  0.43844619,  0.43844619,  0.77093499,\n",
+       "        -1.        ],\n",
+       "       [-1.        , -1.        ,  0.43844619,  0.43844619,  1.        ,\n",
+       "        -1.        ],\n",
+       "       [-1.        ,  0.43844619, -1.        , -1.        ,  0.43844619,\n",
+       "        -1.        ],\n",
+       "       [-1.        ,  0.43844619, -1.        ,  0.43844619,  0.77093499,\n",
+       "         0.43844619],\n",
+       "       [-1.        ,  0.43844619, -1.        ,  0.77093499,  0.43844619,\n",
+       "        -1.        ],\n",
+       "       [-1.        ,  0.43844619, -1.        ,  0.77093499,  1.        ,\n",
+       "         0.43844619],\n",
+       "       [-1.        ,  0.43844619,  0.43844619, -1.        ,  0.43844619,\n",
+       "         0.43844619],\n",
+       "       [-1.        ,  0.43844619,  0.43844619,  0.43844619,  0.77093499,\n",
+       "         0.43844619],\n",
+       "       [-1.        ,  0.43844619,  0.43844619,  0.43844619,  1.        ,\n",
+       "        -1.        ],\n",
+       "       [-1.        ,  0.43844619,  0.43844619,  0.77093499,  0.43844619,\n",
+       "         0.43844619],\n",
+       "       [-1.        ,  0.43844619,  0.43844619,  0.77093499,  0.77093499,\n",
+       "        -1.        ],\n",
+       "       [-1.        ,  0.77093499, -1.        ,  0.77093499, -1.        ,\n",
+       "         0.43844619],\n",
+       "       [-1.        ,  0.77093499,  0.43844619,  0.43844619, -1.        ,\n",
+       "         0.43844619],\n",
+       "       [-1.        ,  0.77093499,  0.43844619,  0.77093499, -1.        ,\n",
+       "        -1.        ],\n",
+       "       [ 0.43844619, -1.        , -1.        , -1.        ,  0.77093499,\n",
+       "         0.43844619],\n",
+       "       [ 0.43844619, -1.        , -1.        ,  0.43844619, -1.        ,\n",
+       "         0.43844619],\n",
+       "       [ 0.43844619, -1.        , -1.        ,  0.43844619,  0.43844619,\n",
+       "         0.43844619],\n",
+       "       [ 0.43844619, -1.        ,  0.43844619, -1.        ,  0.43844619,\n",
+       "         0.43844619],\n",
+       "       [ 0.43844619, -1.        ,  0.43844619, -1.        ,  0.77093499,\n",
+       "        -1.        ],\n",
+       "       [ 0.43844619, -1.        ,  0.43844619, -1.        ,  1.        ,\n",
+       "         0.43844619],\n",
+       "       [ 0.43844619, -1.        ,  0.43844619,  0.43844619,  0.77093499,\n",
+       "        -1.        ],\n",
+       "       [ 0.43844619, -1.        ,  0.43844619,  0.43844619,  1.        ,\n",
+       "         0.43844619],\n",
+       "       [ 0.43844619, -1.        ,  0.43844619,  0.77093499,  0.43844619,\n",
+       "         0.43844619],\n",
+       "       [ 0.43844619, -1.        ,  0.43844619,  0.77093499,  1.        ,\n",
+       "        -1.        ],\n",
+       "       [ 0.43844619,  0.43844619, -1.        ,  0.43844619,  0.77093499,\n",
+       "         0.43844619],\n",
+       "       [ 0.43844619,  0.43844619, -1.        ,  0.77093499,  1.        ,\n",
+       "         0.43844619],\n",
+       "       [ 0.43844619,  0.43844619,  0.43844619, -1.        ,  0.77093499,\n",
+       "         0.43844619],\n",
+       "       [ 0.43844619,  0.43844619,  0.43844619,  0.43844619,  0.43844619,\n",
+       "        -1.        ],\n",
+       "       [ 0.43844619,  0.43844619,  0.43844619,  0.77093499,  1.        ,\n",
+       "        -1.        ],\n",
+       "       [ 0.43844619,  0.77093499, -1.        ,  0.43844619,  0.77093499,\n",
+       "        -1.        ],\n",
+       "       [ 0.43844619,  0.77093499, -1.        ,  0.77093499,  0.77093499,\n",
+       "        -1.        ],\n",
+       "       [ 0.43844619,  0.77093499, -1.        ,  0.77093499,  1.        ,\n",
+       "         0.43844619],\n",
+       "       [ 0.43844619,  0.77093499,  0.43844619, -1.        ,  0.77093499,\n",
+       "         0.43844619],\n",
+       "       [ 0.43844619,  0.77093499,  0.43844619,  0.43844619, -1.        ,\n",
+       "        -1.        ],\n",
+       "       [ 0.43844619,  0.77093499,  0.43844619,  0.43844619, -1.        ,\n",
+       "         0.43844619],\n",
+       "       [ 0.43844619,  0.77093499,  0.43844619,  0.43844619,  0.43844619,\n",
+       "        -1.        ],\n",
+       "       [ 0.43844619,  0.77093499,  0.43844619,  0.77093499,  0.77093499,\n",
+       "         0.43844619],\n",
+       "       [ 0.77093499, -1.        , -1.        , -1.        , -1.        ,\n",
+       "         0.43844619],\n",
+       "       [ 0.77093499, -1.        , -1.        ,  0.77093499,  0.43844619,\n",
+       "         0.43844619],\n",
+       "       [ 0.77093499, -1.        ,  0.43844619, -1.        , -1.        ,\n",
+       "        -1.        ],\n",
+       "       [ 0.77093499, -1.        ,  0.43844619,  0.43844619,  0.43844619,\n",
+       "         0.43844619],\n",
+       "       [ 0.77093499, -1.        ,  0.43844619,  0.77093499,  0.43844619,\n",
+       "         0.43844619],\n",
+       "       [ 0.77093499,  0.43844619, -1.        ,  0.43844619,  1.        ,\n",
+       "         0.43844619],\n",
+       "       [ 0.77093499,  0.43844619,  0.43844619, -1.        , -1.        ,\n",
+       "         0.43844619],\n",
+       "       [ 0.77093499,  0.43844619,  0.43844619, -1.        ,  0.77093499,\n",
+       "         0.43844619],\n",
+       "       [ 0.77093499,  0.43844619,  0.43844619,  0.77093499, -1.        ,\n",
+       "        -1.        ],\n",
+       "       [ 0.77093499,  0.43844619,  0.43844619,  0.77093499,  0.43844619,\n",
+       "        -1.        ],\n",
+       "       [ 0.77093499,  0.43844619,  0.43844619,  0.77093499,  1.        ,\n",
+       "        -1.        ],\n",
+       "       [ 0.77093499,  0.77093499, -1.        , -1.        ,  0.43844619,\n",
+       "        -1.        ],\n",
+       "       [ 0.77093499,  0.77093499, -1.        ,  0.43844619,  1.        ,\n",
+       "         0.43844619],\n",
+       "       [ 0.77093499,  0.77093499, -1.        ,  0.77093499,  0.43844619,\n",
+       "        -1.        ],\n",
+       "       [ 0.77093499,  0.77093499, -1.        ,  0.77093499,  1.        ,\n",
+       "         0.43844619],\n",
+       "       [ 0.77093499,  0.77093499,  0.43844619, -1.        ,  0.77093499,\n",
+       "         0.43844619],\n",
+       "       [ 0.77093499,  0.77093499,  0.43844619, -1.        ,  1.        ,\n",
+       "        -1.        ],\n",
+       "       [ 0.77093499,  0.77093499,  0.43844619,  0.77093499,  0.43844619,\n",
+       "         0.43844619],\n",
+       "       [ 0.77093499,  0.77093499,  0.43844619,  0.77093499,  0.77093499,\n",
+       "         0.43844619],\n",
+       "       [ 0.77093499,  0.77093499,  0.43844619,  0.77093499,  1.        ,\n",
+       "         0.43844619]])"
+      ]
+     },
+     "execution_count": 12,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "SupportVectors"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "2453bf87-e89e-4fa6-9d50-f7a77969ab16",
+   "metadata": {},
+   "source": [
+    "### Bias"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 13,
+   "id": "264ee3ef-216b-455e-a92a-573ed3f75ce6",
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "0.2798437094039253"
+      ]
+     },
+     "execution_count": 13,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "# The bias of the hyperplane's equation\n",
+    "Bias"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "31c30d84-4082-4e49-8880-bb976443f50b",
+   "metadata": {},
+   "source": [
+    "### Kernel Instance"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 14,
+   "id": "2ef63f57-e5aa-4d48-bdd1-39ecb207adb2",
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "<orsvm.kernels.Legendre at 0x20dad5c7790>"
+      ]
+     },
+     "execution_count": 14,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "# The fitted kernel model\n",
+    "KernelInstance"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "519824fb-2240-4ef4-8974-76209e03fd06",
+   "metadata": {},
+   "source": [
+    "## Inspect the model's accuracy"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "1ede325b-54b1-43f3-8e31-a924e0d6352f",
+   "metadata": {},
+   "source": [
+    "Model's accuracy report is achievable in the end of fitting procedure. All metrics are from `sk_learn` package.\n",
+    "ModelPredict funcyion is the last step, after loading data set and fitting procedure \n",
+    "Model Prediction function"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 15,
+   "id": "56811bab-dd07-4624-9f5c-57b253a97193",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "** Accuracy score: 0.9328703703703703\n",
+      "** Classification Report:\n",
+      "               precision    recall  f1-score   support\n",
+      "\n",
+      "          -1       0.95      0.91      0.93       216\n",
+      "           1       0.92      0.95      0.93       216\n",
+      "\n",
+      "    accuracy                           0.93       432\n",
+      "   macro avg       0.93      0.93      0.93       432\n",
+      "weighted avg       0.93      0.93      0.93       432\n",
+      "\n",
+      "** Confusion Matrix:\n",
+      " [[197  19]\n",
+      " [ 10 206]]\n"
+     ]
+    },
+    {
+     "data": {
+      "text/plain": [
+       "0.9328703703703703"
+      ]
+     },
+     "execution_count": 15,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "obj.ModelPredict(X_test,y_test,Bias,KernelInstance)"
+   ]
+  }
+ ],
+ "metadata": {
+  "kernelspec": {
+   "display_name": "Python 3 (ipykernel)",
+   "language": "python",
+   "name": "python3"
+  },
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 3
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython3",
+   "version": "3.9.7"
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 5
+}

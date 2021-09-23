@@ -1,0 +1,3 @@
+numpy==1.19.2
+cvxopt==1.2.0
+scikit_learn==0.24.0

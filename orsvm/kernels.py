@@ -1,5 +1,5 @@
 """
-Kernel function
+Kernel functions
 
 """
 
@@ -106,7 +106,7 @@ class Chebyshev(object):
         """
 
 
-    #Pairewise implemantation of Chebyshev Kernel aka Generalized Chebyshev Kernel
+    #Pairewise/vectorial implemantation of Chebyshev Kernel aka Generalized Chebyshev Kernel
     def G_Tn(self, x, n,f='r'):
         if f == 'e':
             """

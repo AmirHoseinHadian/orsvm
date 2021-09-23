@@ -28,3 +28,9 @@ conda create --n ORSVM python=3.8 pandas sklearn numpy cvxopt
 conda activate ORSVM
 pip install orsvm
 ```
+
+## Documentation
+The latest documentation can be found here: http://orsvm.readthedocs.io/
+
+## Cite
+[![DOI](https://zenodo.org/badge/409558175.svg)](https://zenodo.org/badge/latestdoi/409558175)

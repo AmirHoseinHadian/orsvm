@@ -20,10 +20,11 @@ setup(
     ],
     packages=['orsvm'],
     install_requires=[
+            "Cython",
             "cvxopt",
             "numpy",
             "pandas",
-            "sklearn"
+            "scikit_learn"
         ],
     python_requires='>=3.8',
 )

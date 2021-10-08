@@ -88,6 +88,52 @@ class Legendre(object):
             result += result * t
         
         return result
+    
+    
+class Chebyshev(object):
+    def __init__(self, order):
+        self.order = order
+        self.name = "Chebyshev"
+        
+        """
+        This is Chebyshev class contains two functions:
+
+        1- G_Tn used in Gegenbauer kernel:
+            Vectorized method of calculating chebsyhev polynomials terms.
+            Calculation of Explicit form is also considered, where 'f=e' represents the use of Explicit equation: 'np.cos(n * np.arccos(x))' and "f=r" represents recursive form
+
+        2- kernel fucntion to calculate the cheybshev kenrel fucntion.
+
+        """
+
+
+    #Pairewise/vectorial implemantation of Chebyshev Kernel aka Generalized Chebyshev Kernel
+    def G_Tn(self, x, n,f='r'):
+        if f == 'e':
+            """
+                Explicit form
+            """
+            return np.cos(n * np.arccos(x))
+
+        elif f == 'r':
+            """
+                Recursive form
+            """
+            if n == 0:
+                return 1
+            elif n == 1:
+                return x
+            elif n >= 2:
+                return 2 * x * np.transpose(self.G_Tn(x, n - 1)) - self.G_Tn(x, n - 2)
+                
+
+
+    def kernel(self, x, y,form='r'):
+        d = len(x)
+        chebyshev_result = 0
+        for i in range(self.order):
+            chebyshev_result += (np.inner(self.G_Tn(x, i),self.G_Tn(y, i)))
+        return chebyshev_result / (np.sqrt((d - np.inner(x, y))) + 0.002) # +0.002 according to Meng Tian et.al
         
 class Gegenbauer(object):
 
@@ -131,9 +177,6 @@ class Gegenbauer(object):
         for t in temp:
             result += result * t
         return result
-
-
-
 
 
 class Jacobi(object):

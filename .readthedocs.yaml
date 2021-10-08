@@ -1,0 +1,16 @@
+version: 2
+
+python:
+  version: "3.8"
+  # Install our python package before building the docs
+  install:
+    - method: pip
+      path: .
+      
+sphinx:
+  fail_on_warning: true
+
+formats:
+  - pdf
+  - epub
+  

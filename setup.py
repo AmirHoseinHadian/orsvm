@@ -31,7 +31,11 @@ setup(
             'cvxopt',
             'numpy',
             'pandas',
-            'scikit_learn'
+            'scikit_learn',
+	    'sphinx',
+	    'ipykernel',
+	    'nbsphinx'
+	    
         ],
     python_requires='>=3.8',
 )

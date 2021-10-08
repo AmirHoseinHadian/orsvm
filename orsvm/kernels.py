@@ -7,6 +7,51 @@ import sys
 import math
 import numpy as np
 
+class Chebyshev(object):
+    def __init__(self, order,form):
+        self.order = order
+        self.name = "Chebyshev"
+        self.form = form
+        
+        """
+        This is Chebyshev class contains two functions:
+
+        1- G_Tn used in Gegenbauer kernel:
+            Vectorized method of calculating chebsyhev polynomials terms.
+            Calculation of Explicit form is also considered, where 'f=e' represents the use of Explicit equation: 'np.cos(n * np.arccos(x))' and "f=r" represents recursive form
+
+        2- kernel fucntion to calculate the cheybshev kenrel fucntion.
+
+        """
+
+
+    #Pairewise/vectorial implemantation of Chebyshev Kernel aka Generalized Chebyshev Kernel
+    def G_Tn(self, x, n):
+        if self.form == "e":
+            """
+                Explicit form
+            """
+            return np.cos(n * np.arccos(x))
+
+        elif self.form == "r":
+            """
+                Recursive form
+            """
+            if n == 0:
+                return 1
+            elif n == 1:
+                return x
+            elif n >= 2:
+                return 2 * x * np.transpose(self.G_Tn(x, n - 1)) - self.G_Tn(x, n - 2)
+                
+
+
+    def kernel(self, x, y):
+        d = len(x)
+        chebyshev_result = 0
+        for i in range(self.order):
+            chebyshev_result += (np.inner(self.G_Tn(x, i),self.G_Tn(y, i)))
+        return chebyshev_result / (np.sqrt((d - np.inner(x, y))) + 0.002) # +0.002 according to Meng Tian et.al
 
 class Legendre(object):
     def __init__(self, order=1):
@@ -92,9 +137,9 @@ class Chebyshev(object):
         
 class Gegenbauer(object):
 
-    def __init__(self, order=1, alpha=1):
+    def __init__(self, order=1, Lambda=1):
         self.order = order
-        self.alpha = alpha
+        self.lambda = Lambda
         self.name = "Gegenbauer"
 
     """
@@ -111,15 +156,15 @@ class Gegenbauer(object):
             if n == 0:
                 return 1
             elif n == 1:
-                return 2 * self.alpha * x
+                return 2 * self.lambda * x
             elif n > 1:
-                return ((2 * (n - 1 + self.alpha) / n * x * self.Gegenbauer_term(x, n-1)) - (((n + (2 * self.alpha) - 2) / n) * self.Gegenbauer_term(x, n - 2)))
+                return ((2 * (n - 1 + self.lambda) / n * x * self.Gegenbauer_term(x, n-1)) - (((n + (2 * self.lambda) - 2) / n) * self.Gegenbauer_term(x, n - 2)))
             return 0
         except:
             sys.exit("order must be equal or grater then 0")
 
-    def Gegenbauer_weight(self, x, z, e):
-        return ((1 - x ** 2) * (1 - z ** 2)) ** (self.alpha - 0.5) + 0.0
+    def Gegenbauer_weight(self, x, z):
+        return ((1 - x ** 2) * (1 - z ** 2)) ** (self.lambda - 0.5) 
 
     def Gegenbauer_scale(self, n):
         return (math.sqrt(n + 1) * abs(self.Gegenbauer_term(1, n))) ** -1
@@ -128,12 +173,10 @@ class Gegenbauer(object):
         result = 1
         temp = 0
         for i in range(self.order):
-            temp += self.Gegenbauer_term(x, i) * self.Gegenbauer_term(z, i) * self.Gegenbauer_weight(x, z, 0.0) * self.Gegenbauer_scale(i)**2
+            temp += self.Gegenbauer_term(x, i) * self.Gegenbauer_term(z, i) * self.Gegenbauer_weight(x, z) * self.Gegenbauer_scale(i)**2
         for t in temp:
             result += result * t
         return result
-
-
 
 
 class Jacobi(object):
@@ -151,11 +194,13 @@ class Jacobi(object):
     """
 
     def __init__(self, psi,omega,order=3,noise=0.1):
-        self.noise = noise
-        self.order = order
         self.psi = psi
         self.omega = omega
+        self.order = order
+        self.noise = noise
         self.name = "Jacobi"
+
+        
         
         
     def An(self,n):

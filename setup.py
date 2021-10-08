@@ -1,30 +1,37 @@
 from setuptools import setup,find_packages
+import pathlib
 
-with open("README.md", "r") as fh:
-    long_description = fh.read()
+here = pathlib.Path(__file__).parent.resolve()
+
+
+# Get the long description from the README file
+long_description = (here / 'README.md').read_text(encoding='utf-8')
+
 
 setup(
-    name="orsvm", # Replace with your own username
-    version="0.1.1",
-    author="Amir Hossein Hadian Rasenan, Sherwin Nedaei Janbesaraei, Amirreza Azmoon, Mohammad Akhavan",
-    author_email="amir.h.hadian@gmail.com",
-    description="SVM with Orthogonal Kernel functions of fractional order and normal",
+    name='orsvm', 
+    version='0.1.1',
+    description='SVM with Orthogonal Kernel functions of fractional order and normal',
     long_description=long_description,
-    long_description_content_type="text/markdown",
-    url="Empty",
-    classifiers=[	
-        "Programming Language :: Python :: 3",
-        "License :: OSI Approved :: GNU GPLv3 License",
-        "Operating System :: OS Independent",
-        "Topic :: Scientific/Engineering :: Artificial Intelligence",
+    long_description_content_type='text/markdown',
+    url='https://github.com/AmirHoseinHadian/orsvm',
+    author='Amir Hossein Hadian Rasenan, Sherwin Nedaei Janbesaraei, Amirreza Azmoon, Mohammad Akhavan',
+    author_email='amir.h.hadian@gmail.com',
+    classifiers=[
+	'Development Status :: 4 - Beta',	
+        'Programming Language :: Python :: 3',
+        'License :: OSI Approved :: MIT License',
+        'Operating System :: OS Independent',
+        'Topic :: Scientific/Engineering :: Artificial Intelligence',
     ],
+    keywords='SVM, Orthogonal Polynomials, Classification, Chebyshev, Legendre, Gegenbauer, Jacobi',
     packages=['orsvm'],
     install_requires=[
-            "Cython",
-            "cvxopt",
-            "numpy",
-            "pandas",
-            "scikit_learn"
+            'Cython',
+            'cvxopt',
+            'numpy',
+            'pandas',
+            'scikit_learn'
         ],
     python_requires='>=3.8',
 )

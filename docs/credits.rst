@@ -4,8 +4,7 @@ This package was developed by ORSVM Team, with the help of Amir Hosein Hadian Ra
 When using this package or part of the code for your own research, we ask you to cite us (using the Zenodo DOI below). Even though we tested all functions, we cannot assure that it will work perfectly on all platforms and data formats. Therefore, feedback on usage and issues is especially welcomed at this stage.
 If you have any questions or would like to contribute, you can write us at amir.h.hadian@gmail.com.
 
-Cite us:
-.. image:: https://zenodo.org/badge/409558175.svg
-   :target: https://zenodo.org/badge/latestdoi/409558175
+.. image:: https://zenodo.org/badge/DOI/10.5281/409558175.svg
+   :target: https://doi.org/10.5281/zenodo.5524565
 
 

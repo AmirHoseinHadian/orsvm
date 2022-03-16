@@ -6,5 +6,4 @@ If you have any questions or would like to contribute, you can write us at amir.
 
 Cite us:
 
-## Cite
 [![DOI](https://zenodo.org/badge/409558175.svg)](https://zenodo.org/badge/latestdoi/409558175)

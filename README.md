@@ -1,3 +1,5 @@
+![LOGO](docs/_static/identicons.png)
+
 # ORSVM 
 
 ORSVM is a free software package which provides a SVM classifier with  some novel orthogonal polynomial kernels.

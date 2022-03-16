@@ -1,5 +1,10 @@
 Credits
 ============
-This package was developed by ORSVM Team, with the help of Amir Hosein Hadian Rasanan, Sherwin Nedaei Janbesaraei, Amirreza Azmoon, Mohammad Akhavan. It is part of ongoing scientific work at the Shahid Beheshti University and Institut for research in fundumental sciences, in collaboration with Prof. Jamal Amani Rad.
-When using this package or part of the code for your own research, we ask you to cite us (using the Zenodo DOI below) and to always perform a parameter recovery, to make sure that everything is working as it should. Even though we tested all functions, we cannot assure that it will work perfectly on all platforms and data formats. Therefore, feedback on usage and issues is especially welcomed at this stage.
+This package was developed by ORSVM Team, with the help of Amir Hosein Hadian Rasanan, Sherwin Nedaei Janbesaraei, Amirreza Azmoon, Mohammad Akhavan. It is part of ongoing scientific work at the Shahid Beheshti University and Institut for research in fundumental sciences, in collaboration with DR. Jamal Amani Rad.
+When using this package or part of the code for your own research, we ask you to cite us (using the Zenodo DOI below). Even though we tested all functions, we cannot assure that it will work perfectly on all platforms and data formats. Therefore, feedback on usage and issues is especially welcomed at this stage.
 If you have any questions or would like to contribute, you can write us at amir.h.hadian@gmail.com.
+
+Cite us:
+
+## Cite
+[![DOI](https://zenodo.org/badge/409558175.svg)](https://zenodo.org/badge/latestdoi/409558175)

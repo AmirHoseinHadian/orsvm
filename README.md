@@ -8,6 +8,7 @@ In order to classify the dataset with ORSVM, there is a need to normalize the da
 ORSVM library needs numpy and cvxopt libraries to be installed. Arrays, matrices and linear algebraic functions have been used repeatedly from numpy and
  the heart of SVM algorithm which is finding the Support Vectors is done by use of a convex quadratic solver from cvxopt library which is in turn a free python package for 
  convex optimization. 
+ 
  A suitable guide on this package is available at http://cvxopt.org about installation and how to use.
  
 

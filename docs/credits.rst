@@ -5,5 +5,7 @@ When using this package or part of the code for your own research, we ask you to
 If you have any questions or would like to contribute, you can write us at amir.h.hadian@gmail.com.
 
 Cite us:
+.. image:: https://zenodo.org/badge/409558175.svg
+   :target: https://zenodo.org/badge/latestdoi/409558175
 
-[![DOI](https://zenodo.org/badge/409558175.svg)](https://zenodo.org/badge/latestdoi/409558175)
+

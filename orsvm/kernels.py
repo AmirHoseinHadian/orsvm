@@ -139,7 +139,7 @@ class Gegenbauer(object):
 
     def __init__(self, order=1, Lambda=1):
         self.order = order
-        self.lambda = Lambda
+        self.Lambda = Lambda
         self.name = "Gegenbauer"
 
     """
@@ -156,15 +156,15 @@ class Gegenbauer(object):
             if n == 0:
                 return 1
             elif n == 1:
-                return 2 * self.lambda * x
+                return 2 * self.Lambda * x
             elif n > 1:
-                return ((2 * (n - 1 + self.lambda) / n * x * self.Gegenbauer_term(x, n-1)) - (((n + (2 * self.lambda) - 2) / n) * self.Gegenbauer_term(x, n - 2)))
+                return ((2 * (n - 1 + self.Lambda) / n * x * self.Gegenbauer_term(x, n-1)) - (((n + (2 * self.Lambda) - 2) / n) * self.Gegenbauer_term(x, n - 2)))
             return 0
         except:
             sys.exit("order must be equal or grater then 0")
 
     def Gegenbauer_weight(self, x, z):
-        return ((1 - x ** 2) * (1 - z ** 2)) ** (self.lambda - 0.5) 
+        return ((1 - x ** 2) * (1 - z ** 2)) ** (self.Lambda - 0.5) 
 
     def Gegenbauer_scale(self, n):
         return (math.sqrt(n + 1) * abs(self.Gegenbauer_term(1, n))) ** -1

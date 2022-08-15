@@ -650,9 +650,9 @@ class Model(object):
                     K[i, j] = kernel_ins.kernel(transformed_x[i], transformed_y[j])
             return K
 
-    def SaveOutput(self, path = None, Weights=None, SupportVectors=None, KernelMatrix=None, Bias=None, accuracy=None):
+    def SaveToJason(self, path = None, Weights=None, SupportVectors=None, KernelMatrix=None, Bias=None, accuracy=None):
         """
-        Function to save output results as json file in the corresponding path.
+        Function to save the fitting results into to the path. The output will be save in jason format.
 
         Parameters
         ----------
@@ -692,7 +692,7 @@ class Model(object):
             KernelMatrix = KernelMatrix.tolist()
 
         # make output dictionary
-        output = {
+        OutputDict = {
             "kernel": self.Kernel,
             "order": self.Order,
             "mode": mode,
@@ -710,37 +710,38 @@ class Model(object):
 
         # if path is None return output as a dictionary
         if path is None:
-            return output
+            return OutputDict
 
         # write output dictionary to json file
         else:
 
             try:
-                with open(path, "w") as outfile:
-                    json.dump(output, outfile)
-                logging.info("Output results saved successfully")
+                with open(path, "w") as OutFile:
+                    json.dump(OutputDict, OutFile)
+                logging.info("Results saved successfully")
 
             except FileNotFoundError:
-                logging.error("Path to save output results not found!")
+                logging.error("Path to save output not found!")
 
             return None
 
 
-    def LoadOutput(self, path):
+    def LoadJason(self, path):
         """
-        Function that loads the output file previously stored by the SaveOutput function and returns it as a dictionary.
+        Function that imports the previously stored fitting results an parameters and returns it as a dictionary.
+        
 
         Parameters
         ----------
         path : str
-            Path to load output file.
+            Path to load json file.
 
         Returns
         ----------
         dict
-        Output results.
+        InputFile results.
         """
-        output = {}
+        InputDict = {}
 
         try:
             with open(path, 'r') as openfile:
@@ -750,16 +751,16 @@ class Model(object):
             """
              convert support vectors, weights , kernel matrix to their original type (numpy array)
             """
-            if isinstance(output["support vectors"], list):
-                output["support vectors"] = np.array(output["support vectors"])
+            if isinstance(InputDict["support vectors"], list):
+                InputDict["support vectors"] = np.array(InputDict["support vectors"])
 
-            if isinstance(output["weights"], list):
-                output["weights"] = np.array(output["weights"])
+            if isinstance(InputDict["weights"], list):
+                InputDict["weights"] = np.array(InputDict["weights"])
 
             if isinstance(output['kernel matrix'], list):
-                output['kernel matrix'] = np.array(output['kernel matrix'])
+                InputDict['kernel matrix'] = np.array(InputDict['kernel matrix'])
 
         except FileNotFoundError:
             logging.error("Path to load output file not found!")
 
-        return output
+        return InputDict

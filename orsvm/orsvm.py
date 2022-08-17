@@ -109,7 +109,7 @@ def SupportMultipliers(array, n, order='asc'):
 
     # if n is a scientific number, select Support vectors that are greater than n
     elif _IsScientific(n):
-        logging.info("** Scientific number", n, "is received as threshold for support vectors")
+        logging.info("** Scientific number %s is received as threshold for support vectors",n)
         support_multipliers = array > float(n)
 
     # if n is a character 'a', the average of Support vectors is calculated. Select Support vectors that are greater than 10^average

@@ -101,9 +101,11 @@ def SupportMultipliers(array, n, order='asc'):
             logging.error("** Error: order should be 'asc' or 'desc'")
             sys.exit()
         elif order == 'asc':
-            support_multipliers = np.sort(array)[:n]  # Support Multipliers in asc order
+            options = np.sort(array)[:n]  # Support Multipliers in asc order
+            support_multipliers = np.isin(array,options)
         elif order == 'desc':
-            support_multipliers = np.sort(array)[::-1][:n]  # Support Multipliers in desc order
+            options = np.sort(array)[::-1][:n]  # Support Multipliers in desc order
+            support_multipliers = np.isin(array,options)
 
     # if n is a scientific number, select Support vectors that are greater than n
     elif _IsScientific(n):

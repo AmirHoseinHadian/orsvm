@@ -351,7 +351,7 @@ class SVM(object):
             New_matrix = np.hstack((np.transpose(G), New_matrix))
             logging.info("** [P, A_transpose, G_transpose] condition value: %s", np.linalg.cond(New_matrix))
             logging.info("** Rank A is: %s Rank [P, A_transpose, G_transpose] is: %s", np.linalg.matrix_rank(A),np.linalg.matrix_rank(New_matrix))
-            logging.info("** %s support vectors are selected out of %s points", len(self.SupportVectorDeterminer), n_samples)
+            logging.info("** %s support vectors are selected out of %s points", len(self.support_vectors), n_samples)
 
         """
         A prediction on support vectors with bias = 0 and computing the error gives the bias

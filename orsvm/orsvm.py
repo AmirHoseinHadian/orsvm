@@ -96,7 +96,7 @@ def SupportMultipliers(array, n, order='asc'):
 
     # select directly first n elements of Lagrange Multipliers whether in asc order or desc order
     if isinstance(n, int):
-        logging.info("** Strictly", n, " first elements of support vectors are selected!")
+        logging.info('** Strictly %s first elements of support vectors are selected!',n)
         if order not in ('asc', 'desc'):
             logging.error("** Error: order should be 'asc' or 'desc'")
             sys.exit()

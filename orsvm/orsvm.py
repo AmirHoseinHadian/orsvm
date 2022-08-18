@@ -122,7 +122,7 @@ def SupportMultipliers(array, n, order='asc'):
             sum += c
         sv_treshold = int(sum / len(array))
 
-        logging.info("** sv threshold: 10^%s", sv_treshold)
+        logging.info("** support vector threshold: 10^%s", sv_treshold)
         support_multipliers = array > 10 ** +sv_treshold
     return support_multipliers
 
@@ -371,7 +371,7 @@ class SVM(object):
 
         Parameters
         ----------
-        x : Array
+        x : numpy array
             the input array to predict the corresponding labels according to fitted model.
         b : Float
             The bias to be used for prediction.
@@ -565,9 +565,9 @@ class Model(object):
 
             Parameters
             ----------
-            x_test : array/ DataFrame, optional
+            x_test : numpy array
                 Test set.
-            y_test : array, optional
+            y_test : numpy array
                 Test set labels.
             bias : float
                 The bias of hyperplane's equation.
@@ -696,12 +696,18 @@ class Model(object):
         # make output dictionary
         OutputDict = {
             "kernel": self.Kernel,
+            "kernelParam1" : self.KernelParam1 ,
+            "kernelParam2" : self.KernelParam2,
             "order": self.Order,
+            "form" : self.Form,
+            "noise" : self.Noise,
             "mode": mode,
+            "C" : self.C,
             "transition": self.T,
             "svd": self.SupportVectorDeterminer,
-            "Lagrange multipliers": self.OrsvmModel.support_multipliers.tolist(),
+            "support multipliers": self.OrsvmModel.support_multipliers.tolist(),
             "support vectors": SupportVectors,
+            "support vector labels" : self.OrsvmModel.support_vector_labels.tolist() ,
             "weights": Weights,
             "kernel matrix": KernelMatrix,
             "bias": Bias,
@@ -728,41 +734,116 @@ class Model(object):
             return None
 
 
-    def LoadJason(self, path):
+def LoadJason(path):
+    """
+    Function that imports the previously stored fitting results and parameters and returns it as a dictionary.
+
+    Parameters
+    ----------
+    path : str
+        Path to load json file.
+    Returns
+    ----------
+    dict
+    InputFile results.
+    """
+    OutputDict = {}
+
+    try:
+        with open(path, 'r') as openfile:
+            # Reading from json file
+            OutputDict = json.load(openfile)
+
         """
-        Function that imports the previously stored fitting results an parameters and returns it as a dictionary.
-        
-
-        Parameters
-        ----------
-        path : str
-            Path to load json file.
-
-        Returns
-        ----------
-        dict
-        InputFile results.
+         convert support vectors, weights , kernel matrix to their original type (numpy array)
         """
-        InputDict = {}
+        if isinstance(OutputDict["support vectors"], list):
+            OutputDict["support vectors"] = np.array(OutputDict["support vectors"])
 
-        try:
-            with open(path, 'r') as openfile:
-                # Reading from json file
-                output = json.load(openfile)
+        if isinstance(OutputDict["weights"], list):
+            OutputDict["weights"] = np.array(OutputDict["weights"])
 
-            """
-             convert support vectors, weights , kernel matrix to their original type (numpy array)
-            """
-            if isinstance(InputDict["support vectors"], list):
-                InputDict["support vectors"] = np.array(InputDict["support vectors"])
+        if isinstance(OutputDict['kernel matrix'], list):
+            OutputDict['kernel matrix'] = np.array(OutputDict['kernel matrix'])
 
-            if isinstance(InputDict["weights"], list):
-                InputDict["weights"] = np.array(InputDict["weights"])
+        OutputDict['support multipliers'] = np.array(OutputDict['support multipliers'])
+        OutputDict['support vector labels'] = np.array(OutputDict['support vector labels'])
 
-            if isinstance(output['kernel matrix'], list):
-                InputDict['kernel matrix'] = np.array(InputDict['kernel matrix'])
 
-        except FileNotFoundError:
-            logging.error("Path to load output file not found!")
+    except FileNotFoundError:
+        logging.error("Path to load output file not found!")
+        sys.exit()
 
-        return InputDict
+    return OutputDict
+
+
+
+def PredictWithJson(path, X_test, y_test) :
+    """
+    Function that predicts labels with the previously stored fitting results and returns the accuracy score of the model.
+
+    Parameters
+    ----------
+    path : str
+        Path to load json file.
+    X_test : numpy array
+        test set
+    y_test : numpy array
+        test labels
+
+    Returns
+    -------
+    float
+       Accuracy_score.
+    """
+
+    """
+    Load JSON file and read previously stored fitting results from the dictionary
+    """
+
+    OutputDict = LoadJason(path)
+    kernel = OutputDict['kernel']
+    order = OutputDict['order']
+    form = OutputDict['form']
+    kernelParam1 = OutputDict['kernelParam1']
+    kernelParam2 = OutputDict['kernelParam2']
+    T = OutputDict['transition']
+    C = OutputDict['C']
+    noise = OutputDict['noise']
+    bias = OutputDict['bias']
+    SupportVectorDeterminer = OutputDict["svd"]
+
+    """
+    Create an object of SVM class with proper parameters with orthogonal kernel
+    """
+
+    orsvmModel = SVM(kernel, order, T, kernelParam1, kernelParam2, SupportVectorDeterminer, form, C, noise)
+    orsvmModel.support_multipliers = OutputDict["support multipliers"]
+    orsvmModel.support_vectors = OutputDict['support vectors']
+    orsvmModel.support_vector_labels = OutputDict['support vector labels']
+
+    obj = Model(kernel=kernel, order=order, KernelParam1=kernelParam1, KernelParam2=kernelParam2, T=T, noise=noise ,orsvmModel=orsvmModel) # create an object of Model class with proper parameters
+
+
+    if kernel == 'Chebyshev':
+        kernelInstance = Chebyshev(order, form)  # making kernel instance
+        accuracy = obj.ModelPredict(X_test, y_test, bias, kernelInstance) # call ModelPredict function
+
+
+    elif kernel == "Gegenbauer":
+        kernelInstance = Gegenbauer(order, kernelParam1)  # making kernel instance
+        accuracy = obj.ModelPredict(X_test, y_test, bias, kernelInstance) # call ModelPredict function
+
+    elif kernel == "Jacobi":
+        kernelInstance = Jacobi(kernelParam1, kernelParam2, order, noise)  # making kernel instance
+        accuracy = obj.ModelPredict(X_test, y_test, bias, kernelInstance) # call ModelPredict function
+
+
+    elif kernel == "Legendre":
+        kernelInstance = Legendre(order)  # making kernel instance
+        accuracy = obj.ModelPredict(X_test, y_test, bias, kernelInstance) # call ModelPredict function
+
+
+
+    return accuracy
+

@@ -332,7 +332,7 @@ class SVM(object):
           in asc/desc order and the first "n" number of them will be chosen as Support Vectors
         """
 
-        support_m_indices = SupportMultipliers(lagrange_multipliers, self.SupportVectorDeterminer, order=None)  # Compute Support Vectors
+        support_m_indices = SupportMultipliers(lagrange_multipliers, self.SupportVectorDeterminer)  # Compute Support Vectors
         self.support_multipliers = lagrange_multipliers[support_m_indices]  # select support_multipliers from Lagrange multipliers corresponding to support multipliers indices
         self.support_vectors = x_train[ support_m_indices]  # Support Vectors are points from input data corresponding to support multipliers indices
         self.support_vector_labels = y[support_m_indices]  # label of Support Vectors
@@ -539,6 +539,15 @@ class Model(object):
         """
         Some information will be logged about Model 
         """
+        y_unique_values = np.unique(y_train)
+
+        if(len(y_unique_values) == 2)  :
+            y_train [y_train == 0] = -1
+
+        elif(len(y_unique_values) > 2) :
+            logging.info("Multiclassification")
+            sys.exit()
+            
         # print("*" * 10, datetime.now().strftime("%d/%m/%Y %H:%M:%S"), "*" * 10)
         logging.info("** ORSVM kernel: %s", self.Kernel)
         logging.info("** Order: %s", self.Order)
@@ -579,6 +588,15 @@ class Model(object):
             float
                Accuracy_score.
         """
+        y_unique_values = np.unique(y_test)
+
+        if (len(y_unique_values) == 2):
+            y_test[y_test == 0] = -1
+
+        elif (len(y_unique_values) > 2):
+            logging.info("Multiclassification")
+            sys.exit()
+            
         x_test = Transform(x_test, self.T)  # Transform the test-set into new space
         y_predict = self.OrsvmModel.Predict(x_test, bias, k_ins)  # find the accuracy
 

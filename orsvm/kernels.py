@@ -200,6 +200,7 @@ class Gegenbauer(object):
         Orthogonal kernel's order.
     Lambda : float
         Hyperparameter of Gegenbauer kernel.
+        lambda should be greater than -0.5.
     name : str , default is Gegenbauer
         Kernel name.
 
@@ -225,6 +226,7 @@ class Gegenbauer(object):
             Orthogonal kernel's order.
         Lambda : float
             Hyperparameter of Gegenbauer kernel.
+            lambda should be greater than -0.5.
         """
         self.order = order
         self.Lambda = Lambda
@@ -327,8 +329,10 @@ class Jacobi(object):
     ----------
     psi : float
         Hyperparameter of Jacobi kernel.
+        psi should be greater than -1.
     omega : float
          Hyperparameter of Jacobi kernel.
+         omega should be greater than -1.
     order : int
         Orthogonal kernel's order.
     noise : float
@@ -361,8 +365,10 @@ class Jacobi(object):
         ----------
         psi : float
             Hyperparameter of Jacobi kernel.
+            psi should be greater than -1.
         omega : float
              Hyperparameter of Jacobi kernel.
+             omega should be greater than -1.
         order : int
             Orthogonal kernel's order.
         noise : float

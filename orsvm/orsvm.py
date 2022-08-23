@@ -141,11 +141,11 @@ class SVM(object):
         The Transition order. 0<T<1. default is 1, which means transition to normal space (normalization) instead of transformation.
     KernelParam1 : float
         First hyperparameter of the kernels for Jacobi and Gegenbauer.
-        Jacobi: KernelParam1 refers to psi, first hyperparameters of jacobi kernel.
-        Gegenbauer: KernelParam1 refers to lambda, the hyperparameter of Gegenbauer kernel.
+        Jacobi: KernelParam1 refers to psi, first hyperparameters of jacobi kernel. psi should be greater than -1.
+        Gegenbauer: KernelParam1 refers to lambda, the hyperparameter of Gegenbauer kernel. lambda should be greater than -0.5.
     KernelParam2 : float
         Second hyperparameter of the kernels for Jacobi.
-        Jacobi: KernelParam2 refers to the omega, second hyperparameter of the jacobi kernel.
+        Jacobi: KernelParam2 refers to the omega, second hyperparameter of the jacobi kernel. omega should be greater than -1.
     SupportVectorDeterminer : char , int , scientific number , optional
          Support vector determiner. 3 approaches are possible to choose the support vectors
          among Lagrange Multipliers:
@@ -195,11 +195,11 @@ class SVM(object):
             The Transition order. 0<T<1. default is 1, which means transition to normal space (normalization) instead of transformation.
         KernelParam1 : float
             First hyperparameter of the kernels for Jacobi and Gegenbauer
-            Jacobi: KernelParam1 refers to psi, first hyperparameters of jacobi kernel.
-            Gegenbauer: KernelParam1 refers to lambda, the hyperparameter of Gegenbauer kernel.
+            Jacobi: KernelParam1 refers to psi, first hyperparameters of jacobi kernel. psi should be greater than -1.
+            Gegenbauer: KernelParam1 refers to lambda, the hyperparameter of Gegenbauer kernel. lambda should be greater than -0.5.
         KernelParam2 : float
             Second hyperparameter of the kernels for Jacobi.
-            Jacobi: KernelParam2 refers to the omega, second hyperparameter of the jacobi kernel.
+            Jacobi: KernelParam2 refers to the omega, second hyperparameter of the jacobi kernel. omega should be greater than -1.
         svd : char , int , scientific number , optional
              Support vector determiner. 3 approaches are possible to choose the support vectors
              among Lagrange Multipliers:
@@ -416,12 +416,12 @@ class Model(object):
     KernelParam1 : float, optional
         Default is None.
         First hyperparameter of the kernels for Jacobi and Gegenbauer.
-        Jacobi: KernelParam1 refers to psi, first hyper parameters of jacobi kernel.
-        Gegenbauer: KernelParam1 refers to lambda, the hyperparameter of Gegenbauer kernel.
+        Jacobi: KernelParam1 refers to psi, first hyper parameters of jacobi kernel. psi should be greater than -1.
+        Gegenbauer: KernelParam1 refers to lambda, the hyperparameter of Gegenbauer kernel. lambda should be greater than -0.5.
     KernelParam2: float, optional
         Default is None.
         Second hyperparameter of the kernels for Jacobi.
-        Jacobi: KernelParam2 refers to the omega, second hyperparameter of the jacobi kernel.
+        Jacobi: KernelParam2 refers to the omega, second hyperparameter of the jacobi kernel. omega should be greater than -1.
     SupportVectorDeterminer : char , int , scientific number , optional , The default is 'a'.
          Support vector determiner. 3 approaches are possible to choosing the support vectors
          among Lagrange Multipliers:
@@ -470,12 +470,12 @@ class Model(object):
         KernelParam1 : float, optional
             Default is None.
             First hyperparameter of the kernels for Jacobi and Gegenbauer.
-            Jacobi: KernelParam1 refers to psi, first hyper parameters of jacobi kernel.
-            Gegenbauer: KernelParam1 refers to lambda, the hyperparameter of Gegenbauer kernel.
+            Jacobi: KernelParam1 refers to psi, first hyper parameters of jacobi kernel. psi should be greater than -1.
+            Gegenbauer: KernelParam1 refers to lambda, the hyperparameter of Gegenbauer kernel. lambda should be greater than -0.5.
         KernelParam2: float, optional
             Default is None.
             Second hyperparameter of the kernels for Jacobi.
-            Jacobi: KernelParam2 refers to the omega, second hyperparameter of the jacobi kernel.
+            Jacobi: KernelParam2 refers to the omega, second hyperparameter of the jacobi kernel. omega should be greater than -1.
         svd : char , int , scientific number , optional , The default is 'a'.
              Support vector determiner. 3 approaches are possible to choosing the support vectors
              among Lagrange Multipliers:
@@ -536,18 +536,20 @@ class Model(object):
                 Kernel instance.
         """
 
-        """
-        Some information will be logged about Model 
-        """
-        y_unique_values = np.unique(y_train)
+        
+        y_unique_values = np.unique(y_train)  # get unique labels in y_train
 
-        if(len(y_unique_values) == 2)  :
+        if(len(y_unique_values) == 2)  :  # if it is binary classification, map zero labels to -1
             y_train [y_train == 0] = -1
-
+            
+        #TODO
         elif(len(y_unique_values) > 2) :
             logging.info("Multiclassification")
             sys.exit()
             
+        """
+        Some information will be logged about Model 
+        """    
         # print("*" * 10, datetime.now().strftime("%d/%m/%Y %H:%M:%S"), "*" * 10)
         logging.info("** ORSVM kernel: %s", self.Kernel)
         logging.info("** Order: %s", self.Order)
@@ -588,11 +590,12 @@ class Model(object):
             float
                Accuracy_score.
         """
-        y_unique_values = np.unique(y_test)
+        y_unique_values = np.unique(y_test)  # get unique labels in y_test
 
-        if (len(y_unique_values) == 2):
+        if (len(y_unique_values) == 2):  # if it is binary classification, map zero labels to -1
             y_test[y_test == 0] = -1
-
+        
+        #TODO
         elif (len(y_unique_values) > 2):
             logging.info("Multiclassification")
             sys.exit()

@@ -1,7 +1,8 @@
 import sys
 import math
 import numpy as np
-
+import logging
+logging.basicConfig(level=logging.DEBUG, format='%(asctime)s:%(levelname)s:%(message)s')
 
 class Chebyshev(object):
     """
@@ -261,22 +262,27 @@ class Gegenbauer(object):
             sys.exit("order must be equal or grater then 0")
 
     def GegenbauerWeight(self, x, y):
-        """
-       The function to calculate gegenbauer relevant weight.
+            """
+           The function to calculate gegenbauer relevant weight.
+           Parameters
+           ----------
+           x: float
+              A point in dataset.
+           y: float
+              A point in dataset.
+           Returns
+           -------
+           float
+               Gegenbauer weight.
+            """
+        if self.Lambda < -0.5:
+            logging.error("** Error: hyperparamter invalid range! For the Gegenbauer kernel function:  -0.5< kernelParameter ")
+            sys.exit()
+        elif -0.5 <self.Lambda <= 0.5:
+            return 1
+        elif self.Lambda >= 0.5:
+            return ((1 - x ** 2) * (1 - y ** 2)) ** (self.Lambda - 0.5)
 
-       Parameters
-       ----------
-       x: float
-          A point in dataset.
-       y: float
-          A point in dataset.
-
-      Returns
-      -------
-      float
-          Gegenbauer weight.
-     """
-        return ((1 - x ** 2) * (1 - y ** 2)) ** (self.Lambda - 0.5)
 
     def GegenbauerScale(self, n):
         """
@@ -311,11 +317,21 @@ class Gegenbauer(object):
      """
         result = 1
         temp = 0
-        for i in range(self.order):
-            temp += self.GegenbauerTerm(x, i) * self.GegenbauerTerm(y, i) * self.GegenbauerWeight(x, y) * self.GegenbauerScale(i) ** 2
-        for t in temp:
-            result += result * t
+        if self.Lambda < -0.5:
+            logging.error("** Error: hyperparamter invalid range! For the Gegenbauer kernel function:  -0.5< Kernel Parameter ")
+            sys.exit()
+        elif -0.5 <self.Lambda <= 0.5:
+            for i in range(self.order):
+                temp += self.GegenbauerTerm(x, i) * self.GegenbauerTerm(y, i)
+            for t in temp:
+                result += result * t       
+        elif self.Lambda >= 0.5:
+            for i in range(self.order):
+                temp += self.GegenbauerTerm(x, i) * self.GegenbauerTerm(y, i) * self.GegenbauerWeight(x, y) * self.GegenbauerScale(i) ** 2
+            for t in temp:
+                result += result * t
         return result
+
 
 
 class Jacobi(object):

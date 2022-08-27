@@ -228,7 +228,7 @@ class SVM(object):
         noise: float
             Noise is only applicable to the weight function of the Jacobi kernel. recommended values can be 0.1, 0.01,...
             """
-        self.kernel = kernel
+        self.kernel = str(kernel).lower()
         self.order = order
         self.T = T
         self.KernelParam1 = KernelParam1
@@ -270,28 +270,28 @@ class SVM(object):
         n_samples, n_features = x_train.shape
         K = np.zeros((n_samples, n_samples))  # initialize kernel matrix with the shape of (n_samples, n_samples)
 
-        if self.kernel == "Legendre":
+        if self.kernel == "legendre":
             kernel_ins = Legendre(self.order)  # making kernel instance
             # filling kernel matrix by invoking kernel method of kernel instance
             for i in range(n_samples):
                 for j in range(n_samples):
                     K[i, j] = kernel_ins.kernel(x_train[i], x_train[j])
 
-        elif self.kernel == "Jacobi":
+        elif self.kernel == "jacobi":
             kernel_ins = Jacobi(self.KernelParam1, self.KernelParam2, self.order, self.noise)  # making kernel instance
             # filling kernel matrix by invoking kernel method of kernel instance
             for i in range(n_samples):
                 for j in range(n_samples):
                     K[i, j] = kernel_ins.kernel(x_train[i], x_train[j])
 
-        elif self.kernel == "Gegenbauer":
+        elif self.kernel == "gegenbauer":
             kernel_ins = Gegenbauer(self.order, self.KernelParam1)  # making kernel instance
             # filling kernel matrix by invoking kernel method of kernel instance
             for i in range(n_samples):
                 for j in range(n_samples):
                     K[i, j] = kernel_ins.kernel(x_train[i], x_train[j])
 
-        elif self.kernel == "Chebyshev":
+        elif self.kernel == "chebyshev":
             kernel_ins = Chebyshev(self.order, self.form)  # making kernel instance
             # filling kernel matrix by invoking kernel method of kernel instance
             for i in range(n_samples):
@@ -511,7 +511,7 @@ class Model(object):
         noise: float
             Noise is only applicable to the weight function of the Jacobi kernel. recommended values can be 0.1, 0.01,...
         """
-        self.Kernel = kernel
+        self.Kernel = str(kernel).lower()
         self.Order = order
         self.T = T
         self.KernelParam1 = KernelParam1
@@ -544,6 +544,12 @@ class Model(object):
             object
                 Kernel instance.
         """
+        """
+        check whether kernel name is valid or not
+        """
+        if self.Kernel != "legendre" and self.Kernel != "jacobi" and self.Kernel != "gegenbauer" and self.Kernel != "chebyshev" and self.Kernel != "rbf": 
+            logging.error("Kernel name is not valid!")
+            sys.exit()
 
         
         y_unique_values = np.unique(y_train)  # get unique labels in y_train

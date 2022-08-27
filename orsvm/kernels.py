@@ -51,8 +51,7 @@ class Chebyshev(object):
 
         Parameters
         ----------
-         x: float
-            A point in dataset.
+         x: numpy array / float
          n: int
             Order.
 
@@ -87,9 +86,9 @@ class Chebyshev(object):
 
         Parameters
         ----------
-        x: float
+        x: numpy array
             A point in dataset.
-        y: float
+        y: numpy array
             A point in dataset.
 
         Return
@@ -144,8 +143,7 @@ class Legendre(object):
 
         Parameters
         ----------
-        x: float
-          A point in dataset.
+        x: numpy array / float
         n: int
             Order.
 
@@ -171,9 +169,9 @@ class Legendre(object):
 
         Parameters
         ----------
-        x: float
+        x: numpy array
             A point in dataset.
-        y: float
+        y: numpy array
             A point in dataset.
 
        Returns
@@ -239,8 +237,7 @@ class Gegenbauer(object):
 
         Parameters
         ----------
-        x: float
-          A point in dataset.
+        x: numpy array / float
         n: int
             Order.
 
@@ -266,22 +263,21 @@ class Gegenbauer(object):
            The function to calculate gegenbauer relevant weight.
            Parameters
            ----------
-           x: float
-              A point in dataset.
-           y: float
-              A point in dataset.
+           x: numpy array / float
+           y: numpy array / float
+
            Returns
            -------
            float
                Gegenbauer weight.
             """
-        if self.Lambda < -0.5:
-            logging.error("** Error: hyperparamter invalid range! For the Gegenbauer kernel function:  -0.5< kernelParameter ")
-            sys.exit()
-        elif -0.5 <self.Lambda <= 0.5:
-            return 1
-        elif self.Lambda >= 0.5:
-            return ((1 - x ** 2) * (1 - y ** 2)) ** (self.Lambda - 0.5)
+            if self.Lambda < -0.5:
+                logging.error("** Error: hyperparamter invalid range! For the Gegenbauer kernel function:  -0.5< kernelParameter ")
+                sys.exit()
+            elif -0.5 <self.Lambda <= 0.5:
+                return 1
+            elif self.Lambda >= 0.5:
+                return ((1 - x ** 2) * (1 - y ** 2)) ** (self.Lambda - 0.5)
 
 
     def GegenbauerScale(self, n):
@@ -306,9 +302,9 @@ class Gegenbauer(object):
 
         Parameters
         ----------
-        x: float
+        x: numpy array
             A point in dataset.
-        y: float
+        y: numpy array
             A point in dataset.
        Return
        -------
@@ -448,8 +444,7 @@ class Jacobi(object):
 
         Parameters
         ----------
-        x: float
-           A point in dataset.
+        x: numpy array / float
         n: int
             Order.
 
@@ -471,10 +466,8 @@ class Jacobi(object):
 
         Parameters
         ----------
-        x: float
-            A point in dataset.
-        y: float
-            A point in dataset.
+        x: numpy array / float
+        y: numpy array / float
 
         Return
         -------
@@ -490,9 +483,9 @@ class Jacobi(object):
 
         Parameters
         ----------
-        x: float
+        x: numpy array
           A point in dataset.
-        y: float
+        y: numpy array
           A point in dataset.
         Return
         -------
@@ -511,4 +504,43 @@ class Jacobi(object):
         for i in _sum * self.Weight(x, y):
             result = result * i
 
+        return result
+    
+    
+class RBF(object) :
+    """
+    Radial basis function kernel class
+    Attributes
+    ----------
+    gamma : float
+        Hyperparameter of rbf kernel.
+    """
+
+    def __init__(self, gamma ):
+        """
+        Constructor for rbf class.
+        Attributes
+        ----------
+        gamma : float
+        Hyperparameter of rbf kernel.
+        """
+        self.gamma = gamma
+
+    def kernel(self, x, y):
+        """
+        Calculate the rbf kernel function.
+        Parameters
+        ----------
+        x: numpy array
+          A point in dataset.
+        y: numpy array
+          A point in dataset.
+        Return
+        -------
+        float
+            Calculated kernel for x , y.
+        """
+        x_norm = np.sum(np.power(x, 2))  # calculate norm of x
+        y_norm = np.sum(np.power(y, 2))  # calculate norm of y
+        result = np.exp(-self.gamma * (x_norm + y_norm - 2 * np.dot(y, x.T)))  # calculate kernel result
         return result

@@ -10,7 +10,7 @@ from datetime import datetime
 from sklearn.metrics import accuracy_score
 from sklearn.metrics import confusion_matrix
 from sklearn.metrics import classification_report
-from .kernels import Jacobi, Legendre, Gegenbauer, Chebyshev
+from .kernels import Jacobi, Legendre, Gegenbauer, Chebyshev,RBF
 
 cvxopt.solvers.options['show_progress'] = False
 logging.basicConfig(level=logging.DEBUG, format='%(asctime)s:%(levelname)s:%(message)s')
@@ -143,6 +143,7 @@ class SVM(object):
         First hyperparameter of the kernels for Jacobi and Gegenbauer.
         Jacobi: KernelParam1 refers to psi, first hyperparameters of jacobi kernel. psi should be greater than -1.
         Gegenbauer: KernelParam1 refers to lambda, the hyperparameter of Gegenbauer kernel. lambda should be greater than -0.5.
+        rbf : KernelParam1 refers to gamma, the hyperparameter of rbf kernel. gamma should be greater than zero.
     KernelParam2 : float
         Second hyperparameter of the kernels for Jacobi.
         Jacobi: KernelParam2 refers to the omega, second hyperparameter of the jacobi kernel. omega should be greater than -1.
@@ -197,6 +198,7 @@ class SVM(object):
             First hyperparameter of the kernels for Jacobi and Gegenbauer
             Jacobi: KernelParam1 refers to psi, first hyperparameters of jacobi kernel. psi should be greater than -1.
             Gegenbauer: KernelParam1 refers to lambda, the hyperparameter of Gegenbauer kernel. lambda should be greater than -0.5.
+            rbf : KernelParam1 refers to gamma, the hyperparameter of rbf kernel. gamma should be greater than zero.
         KernelParam2 : float
             Second hyperparameter of the kernels for Jacobi.
             Jacobi: KernelParam2 refers to the omega, second hyperparameter of the jacobi kernel. omega should be greater than -1.
@@ -291,6 +293,13 @@ class SVM(object):
 
         elif self.kernel == "Chebyshev":
             kernel_ins = Chebyshev(self.order, self.form)  # making kernel instance
+            # filling kernel matrix by invoking kernel method of kernel instance
+            for i in range(n_samples):
+                for j in range(n_samples):
+                    K[i, j] = kernel_ins.kernel(x_train[i], x_train[j])
+                    
+        elif self.kernel == "rbf":
+            kernel_ins = RBF(self.KernelParam1)  # making kernel instance
             # filling kernel matrix by invoking kernel method of kernel instance
             for i in range(n_samples):
                 for j in range(n_samples):

@@ -271,7 +271,7 @@ class Gegenbauer(object):
            float
                Gegenbauer weight.
             """
-            if self.Lambda < -0.5:
+            if self.Lambda <= -0.5:
                 logging.error("** Error: hyperparamter invalid range! For the Gegenbauer kernel function:  -0.5< kernelParameter ")
                 sys.exit()
             elif -0.5 <self.Lambda <= 0.5:

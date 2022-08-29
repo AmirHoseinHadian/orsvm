@@ -347,6 +347,14 @@ class SVM(object):
         self.support_vector_labels = y[support_m_indices]  # label of Support Vectors
         self._weights = self.support_multipliers  # set support multipliers to weights
         self.solution_status = solution['status']
+        
+        
+        if np.all(np.linalg.eigvals(K) >= 0) == True:
+            logging.info("Kenrel matrix is convex")
+            logging.info("** solution status: %s", solution['status'])
+        elif np.all(np.linalg.eigvals(K) >= 0) == False:
+            logging.warning("A convex kernel matrix is not formed!")
+            logging.warning("** solution status: %s", solution['status'])
 
         """
         If log is True some information about support multipliers and the solution of the convex equation will be logged
@@ -360,6 +368,7 @@ class SVM(object):
             New_matrix = np.hstack((np.transpose(G), New_matrix))
             logging.info("** [P, A_transpose, G_transpose] condition value: %s", np.linalg.cond(New_matrix))
             logging.info("** Rank A is: %s Rank [P, A_transpose, G_transpose] is: %s", np.linalg.matrix_rank(A),np.linalg.matrix_rank(New_matrix))
+            logging.info("kernel matrix is positive semidefinite : %s" ,np.all(np.linalg.eigvals(K) >= 0))
             logging.info("** %s support vectors are selected out of %s points", len(self.support_vectors), n_samples)
 
         """

@@ -377,14 +377,14 @@ class Jacobi(object):
         ----------
         psi : float
             Hyperparameter of Jacobi kernel.
-            psi should be greater than -1.
+            psi should be greater than -1 (KernelParam1 > -1).
         omega : float
              Hyperparameter of Jacobi kernel.
-             omega should be greater than -1.
+             omega should be greater than -1 (KernelParam2 > -1).
         order : int
-            Orthogonal kernel's order.
+            the order orthogonal kernel.
         noise : float
-            A noise  only applicable to weight function of Jacobi kernel. recommended values can be 0.1, 0.01,...
+            A noise only applicable to weight function of Jacobi kernel. recommended values: 0.1, 0.01,...
         """
         self.psi = psi
         self.omega = omega
@@ -410,7 +410,7 @@ class Jacobi(object):
 
     def Bn(self, n):
         """
-        Used in JacobiTerm for calculating Jacobi Jacobi polynomilas.
+        Used in JacobiTerm to calculate Jacobi polynomilas.
 
         Parameters
         ----------
@@ -425,7 +425,7 @@ class Jacobi(object):
 
     def Cn(self, n):
         """
-        Use in JacobiTerm for calculating Jacobi Jacobi polynomilas.
+        Use in JacobiTerm to calculate  Jacobi polynomilas.
 
         Parameters
         ----------
@@ -440,7 +440,7 @@ class Jacobi(object):
 
     def JacobiTerm(self, n, x):
         """
-        Used in Jacobi kernel to calculate the Jacobi polynomials.
+        Used in Jacobi kernel to calculate the Jacobi polynomials for given input and order.
 
         Parameters
         ----------
@@ -474,12 +474,12 @@ class Jacobi(object):
         float
            Jacobi weight.
         """
-        d = len(x)
+        d = len(x)     # input's dimension 
         return (((d - np.dot(x, y)) + self.noise) ** self.psi) * (((d + np.dot(x, y)) + self.noise) ** self.omega)
 
     def kernel(self, x, y):
         """
-        Calculate the Gegenbauer kenrel fucntion.
+        Calculate the Jacobi kenrel fucntion for given inputs.
 
         Parameters
         ----------
@@ -496,7 +496,7 @@ class Jacobi(object):
         result = 1
 
         try:
-            d = len(x)
+            d = len(x)    # Input's dimension
         except:
             sys.exit("input data kernel dimension has to be > 1!")
         for i in range(self.order + 1):

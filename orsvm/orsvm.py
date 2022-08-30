@@ -559,7 +559,10 @@ class Model(object):
         if self.Kernel != "legendre" and self.Kernel != "jacobi" and self.Kernel != "gegenbauer" and self.Kernel != "chebyshev" and self.Kernel != "rbf": 
             logging.error("Kernel name is not valid!")
             sys.exit()
-
+            
+        if (x_train.shape[0]!=y_train.shape[0]) :
+            logging.error("x_train shape is not compatible with y_train shape!")
+            sys.exit()
         
         y_unique_values = np.unique(y_train)  # get unique labels in y_train
 

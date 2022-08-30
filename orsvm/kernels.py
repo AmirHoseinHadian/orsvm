@@ -78,7 +78,7 @@ class Chebyshev(object):
                 elif n >= 2:
                     return 2 * x * np.transpose(self.GTn(x, n - 1)) - self.GTn(x, n - 2)
             except:
-                sys.exit("order must be equal or grater then 0")
+                sys.exit("order must be equal or greater than 0")
 
     def kernel(self, x, y):
         """
@@ -96,6 +96,14 @@ class Chebyshev(object):
         float
             Calculated kernel for x , y.
         """
+        if (self.order < 0) :
+            logging.error("order must be equal or greater than 0")
+            sys.exit()
+            
+        elif (self.order == 0) :
+            return 1
+        
+        
         try:
             d = len(x)
         except:

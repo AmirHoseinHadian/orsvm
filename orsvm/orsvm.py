@@ -563,6 +563,10 @@ class Model(object):
         if (x_train.shape[0]!=y_train.shape[0]) :
             logging.error("x_train shape is not compatible with y_train shape!")
             sys.exit()
+            
+        elif(x_train.shape[0] == 0) :
+            logging.error(" Model can not fit with n_sample = 0 ")
+            sys.exit()
         
         y_unique_values = np.unique(y_train)  # get unique labels in y_train
 
@@ -617,6 +621,14 @@ class Model(object):
             float
                Accuracy_score.
         """
+        if (x_test.shape[0]!=y_test.shape[0]) :
+            logging.error("x_test shape is not compatible with y_test shape!")
+            sys.exit()
+            
+        elif(x_test.shape[0] == 0) :
+            logging.error(" Model can not predict with n_sample = 0 ")
+            sys.exit()
+        
         y_unique_values = np.unique(y_test)  # get unique labels in y_test
 
         if (len(y_unique_values) == 2):  # if it is binary classification, map zero labels to -1

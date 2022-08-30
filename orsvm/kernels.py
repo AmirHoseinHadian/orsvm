@@ -187,6 +187,12 @@ class Legendre(object):
        float
             Calculated kernel for x , y.
         """
+        if (self.order < 0):
+            logging.error("order must be equal or greater than 0")
+            sys.exit()
+
+        elif (self.order == 0):
+            return 1
         result = 1
         temp = 0
         for i in range(self.order):

@@ -313,7 +313,7 @@ class Gegenbauer(object):
      """
         result = 1
         temp = 0
-        if self.Lambda < -0.5:
+        if self.Lambda <= -0.5:
             logging.error("** Error: hyperparamter invalid range! For the Gegenbauer kernel function:  -0.5< Kernel Parameter ")
             sys.exit()
         elif -0.5 <self.Lambda <= 0.5:
@@ -492,6 +492,13 @@ class Jacobi(object):
         float
             Calculated kernel for x , y.
         """
+        if(self.psi<= -1) :
+            logging.error("** Error: hyperparamter invalid range! For the Jacobi kernel function:  -1< Kernel Parameter1 ")
+            sys.exit()
+        if(self.omega<=-1) :
+            logging.error("** Error: hyperparamter invalid range! For the Jacobi kernel function:  -1< Kernel Parameter2 ")
+            sys.exit()
+            
         _sum = 0
         result = 1
 

@@ -326,6 +326,10 @@ class Gegenbauer(object):
      """
         result = 1
         temp = 0
+        
+        if (self.Lambda is None) :
+                self.Lambda = 1
+                
         if self.Lambda <= -0.5:
             logging.error("** Error: hyperparamter invalid range! For the Gegenbauer kernel function:  -0.5< Kernel Parameter ")
             sys.exit()

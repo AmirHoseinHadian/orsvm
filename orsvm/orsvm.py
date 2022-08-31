@@ -567,6 +567,10 @@ class Model(object):
         elif(x_train.shape[0] == 0) :
             logging.error(" Model can not fit with n_sample = 0 ")
             sys.exit()
+            
+        if (self.T<=0 or self.T>1) :
+            logging.error(" T is out of range. T range is : 0 < T <=1 ")
+            sys.exit()
         
         y_unique_values = np.unique(y_train)  # get unique labels in y_train
 

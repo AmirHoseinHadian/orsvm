@@ -80,7 +80,7 @@ class Chebyshev(object):
             except:
                 sys.exit("order must be equal or greater than 0")
         else :
-            logging.error('Form is not valid')
+            logging.error('The oarameter form can only be "r" for recursive or "e" for the explicit equation implementation of the chebyshev kernel!')
             sys.exit()
 
     def kernel(self, x, y):

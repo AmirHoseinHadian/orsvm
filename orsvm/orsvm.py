@@ -679,6 +679,9 @@ class Model(object):
             numpy array
                 Kernel matrix for our custom kernel.
                 """
+        if (x.shape[0] == 0 or y.shape[0] == 0):
+            logging.error(" Kernel matrix can not be computed with n_sample = 0 ")
+            sys.exit()
         n_samples_x, n_features_x = x.shape
         n_samples_y, n_features_y = y.shape
         K = np.zeros((n_samples_x, n_samples_y))  # initialize the kernel matrix
@@ -691,7 +694,7 @@ class Model(object):
             transformed_x = Transform(x, self.T)
             transformed_y = Transform(y, self.T)
 
-        if self.Kernel == 'Chebyshev':
+        if self.Kernel == 'chebyshev':
             kernel_ins = Chebyshev(self.Order, self.Form)  # making kernel instance
             # filling kernel matrix by invoking kernel method of kernel instance
             for i in range(n_samples_x):
@@ -699,7 +702,7 @@ class Model(object):
                     K[i, j] = kernel_ins.kernel(transformed_x[i], transformed_y[j])  
             return K
 
-        elif self.Kernel == "Gegenbauer":
+        elif self.Kernel == "gegenbauer":
             kernel_ins = Gegenbauer(self.Order, self.KernelParam1)  # making kernel instance
             # filling kernel matrix by invoking kernel method of kernel instance
             for i in range(n_samples_x):
@@ -707,7 +710,7 @@ class Model(object):
                     K[i, j] = kernel_ins.kernel(transformed_x[i], transformed_y[j])
             return K
 
-        elif self.Kernel == "Jacobi":
+        elif self.Kernel == "jacobi":
             kernel_ins = Jacobi(self.KernelParam1, self.KernelParam2, self.Order, self.Noise)  # making kernel instance
             # filling kernel matrix by invoking kernel method of kernel instance
             for i in range(n_samples_x):
@@ -715,7 +718,7 @@ class Model(object):
                     K[i, j] = kernel_ins.kernel(transformed_x[i], transformed_y[j])
             return K
 
-        elif self.Kernel == "Legendre":
+        elif self.Kernel == "legendre":
             kernel_ins = Legendre(self.Order)  # making kernel instance
             # filling kernel matrix by invoking kernel method of kernel instance
             for i in range(n_samples_x):

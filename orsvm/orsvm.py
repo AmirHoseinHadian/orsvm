@@ -571,7 +571,7 @@ class Model(object):
             logging.error("x_train shape is not compatible with y_train shape!")
             sys.exit()
             
-        elif(x_train.shape[0] == 0) :
+        elif(x_train.shape[0] == 0 or y_train.shape[0] == 0 ) :
             logging.error(" Model can not fit with n_sample = 0 ")
             sys.exit()
             
@@ -636,7 +636,7 @@ class Model(object):
             logging.error("x_test shape is not compatible with y_test shape!")
             sys.exit()
             
-        elif(x_test.shape[0] == 0) :
+        elif(x_test.shape[0] == 0 or y_test.shape[0) :
             logging.error(" Model can not predict with n_sample = 0 ")
             sys.exit()
         

@@ -79,6 +79,9 @@ class Chebyshev(object):
                     return 2 * x * np.transpose(self.GTn(x, n - 1)) - self.GTn(x, n - 2)
             except:
                 sys.exit("order must be equal or greater than 0")
+        else :
+            logging.error('Form is not valid')
+            sys.exit()
 
     def kernel(self, x, y):
         """

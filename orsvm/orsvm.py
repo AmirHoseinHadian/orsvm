@@ -73,7 +73,7 @@ def SupportMultipliers(array, n, order='asc'):
                 number expressed is scientific notation or not.
            """
 
-        if 'e' in n.lower():
+        if 'e' in str(n).lower():
             return True
         else:
             return False
@@ -96,7 +96,11 @@ def SupportMultipliers(array, n, order='asc'):
 
     # select directly first n elements of Lagrange Multipliers whether in asc order or desc order
     if isinstance(n, int):
-        logging.info('** Strictly %s first elements of support vectors are selected!',n)
+        if (n>len(array)) :
+            logging.info('** Strictly all of (%s) support vectors are selected !',len(array))
+        else :    
+            logging.info('** Strictly %s first elements of support vectors are selected!',n)
+        
         if order not in ('asc', 'desc'):
             logging.error("** Error: order should be 'asc' or 'desc'")
             sys.exit()
@@ -124,6 +128,9 @@ def SupportMultipliers(array, n, order='asc'):
 
         logging.info("** support vector threshold: 10^%s", sv_treshold)
         support_multipliers = array > 10 ** +sv_treshold
+    else:
+        logging.error('support vector determiner is not valid')
+        sys.exit()
     return support_multipliers
 
 

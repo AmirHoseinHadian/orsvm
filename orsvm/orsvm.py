@@ -856,9 +856,12 @@ def LoadJason(path):
 
         if isinstance(OutputDict['kernel matrix'], list):
             OutputDict['kernel matrix'] = np.array(OutputDict['kernel matrix'])
+                                                  
+        if isinstance(OutputDict['support multipliers'] ,list) :
+            OutputDict['support multipliers'] = np.array(OutputDict['support multipliers'])
 
-        OutputDict['support multipliers'] = np.array(OutputDict['support multipliers'])
-        OutputDict['support vector labels'] = np.array(OutputDict['support vector labels'])
+        if isinstance(OutputDict['support vector labels'] ,list) :
+            OutputDict['support vector labels'] = np.array(OutputDict['support vector labels'])
 
 
     except FileNotFoundError:

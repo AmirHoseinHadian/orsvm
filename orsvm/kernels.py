@@ -324,6 +324,9 @@ class Gegenbauer(object):
        float
            Calculated kernel for x , y.
      """
+        if (self.order <0) :
+            logging.error("order must be equal or greater than 0")
+            sys.exit()
         result = 1
         temp = 0
         
@@ -509,6 +512,10 @@ class Jacobi(object):
         float
             Calculated kernel for x , y.
         """
+        if (self.order <0) :
+            logging.error("order must be equal or greater than 0")
+            sys.exit()
+            
         if(self.psi<= -1) :
             logging.error("** Error: hyperparamter invalid range! For the Jacobi kernel function:  -1< Kernel Parameter1 ")
             sys.exit()

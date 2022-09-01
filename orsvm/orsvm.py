@@ -770,6 +770,19 @@ class Model(object):
 
         if isinstance(KernelMatrix, np.ndarray):
             KernelMatrix = KernelMatrix.tolist()
+        
+        status = None
+        support_vector_labels = None
+        support_multipliers = None
+
+        if(self.OrsvmModel is not None) :
+            status = self.OrsvmModel.solution_status
+            if(self.OrsvmModel.support_multipliers is not None) :
+                if(len(self.OrsvmModel.support_multipliers.tolist())!=0) :
+                    support_multipliers = self.OrsvmModel.support_multipliers.tolist()
+            if(self.OrsvmModel.support_vector_labels is not None) :
+                if(len(self.OrsvmModel.support_vector_labels.tolist())!=0):
+                    support_vector_labels = self.OrsvmModel.support_vector_labels.tolist()
 
         # make output dictionary
         OutputDict = {
@@ -783,14 +796,14 @@ class Model(object):
             "C" : self.C,
             "transition": self.T,
             "svd": self.SupportVectorDeterminer,
-            "support multipliers": self.OrsvmModel.support_multipliers.tolist(),
+            "support multipliers": support_multipliers,
             "support vectors": SupportVectors,
-            "support vector labels" : self.OrsvmModel.support_vector_labels.tolist() ,
+            "support vector labels" : support_vector_labels ,
             "weights": Weights,
             "kernel matrix": KernelMatrix,
             "bias": Bias,
             "accuracy": accuracy,
-            "status": self.OrsvmModel.solution_status
+            "status": status
 
         }
 

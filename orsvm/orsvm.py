@@ -890,6 +890,9 @@ def PredictWithJson(path, X_test, y_test) :
     float
        Accuracy_score.
     """
+    if (X_test.shape[0] == 0 or y_test.shape[0] == 0):
+        logging.error(" Model can not predict with n_sample = 0 ")
+        sys.exit()
 
     """
     Load JSON file and read previously stored fitting results from the dictionary
@@ -912,6 +915,17 @@ def PredictWithJson(path, X_test, y_test) :
     """
 
     orsvmModel = SVM(kernel, order, T, kernelParam1, kernelParam2, SupportVectorDeterminer, form, C, noise)
+    if(OutputDict["support multipliers"] is None) :
+        logging.error('Model can not predict with support multipliers of type None ')
+        sys.exit()
+    if(OutputDict['support vectors'] is None) :
+        logging.error('Model can not predict with support vectors of type None ')
+        sys.exit()
+    if(OutputDict['support vector labels'] is None) :
+        logging.error('Model can not predict with support vector labels of type None ')
+        sys.exit()                                              
+                                                  
+                                                  
     orsvmModel.support_multipliers = OutputDict["support multipliers"]
     orsvmModel.support_vectors = OutputDict['support vectors']
     orsvmModel.support_vector_labels = OutputDict['support vector labels']
@@ -919,25 +933,31 @@ def PredictWithJson(path, X_test, y_test) :
     obj = Model(kernel=kernel, order=order, KernelParam1=kernelParam1, KernelParam2=kernelParam2, T=T, noise=noise ,orsvmModel=orsvmModel) # create an object of Model class with proper parameters
 
 
-    if kernel == 'Chebyshev':
+    if kernel == 'chebyshev':
         kernelInstance = Chebyshev(order, form)  # making kernel instance
         accuracy = obj.ModelPredict(X_test, y_test, bias, kernelInstance) # call ModelPredict function
+        return accuracy
 
 
-    elif kernel == "Gegenbauer":
+    elif kernel == "gegenbauer":
         kernelInstance = Gegenbauer(order, kernelParam1)  # making kernel instance
         accuracy = obj.ModelPredict(X_test, y_test, bias, kernelInstance) # call ModelPredict function
+        return accuracy
 
-    elif kernel == "Jacobi":
+    elif kernel == "jacobi":
         kernelInstance = Jacobi(kernelParam1, kernelParam2, order, noise)  # making kernel instance
         accuracy = obj.ModelPredict(X_test, y_test, bias, kernelInstance) # call ModelPredict function
+        return accuracy
 
 
-    elif kernel == "Legendre":
+    elif kernel == "legendre":
         kernelInstance = Legendre(order)  # making kernel instance
         accuracy = obj.ModelPredict(X_test, y_test, bias, kernelInstance) # call ModelPredict function
+        return accuracy
 
 
 
-    return accuracy
+    else:
+        logging.error("Kernel name is not valid")
+        sys.exit()
 

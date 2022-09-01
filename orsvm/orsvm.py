@@ -725,6 +725,10 @@ class Model(object):
                 for j in range(n_samples_y):
                     K[i, j] = kernel_ins.kernel(transformed_x[i], transformed_y[j])
             return K
+                                                 
+        else:
+            logging.error("Kernel name is not valid")
+            sys.exit()
 
     def SaveToJason(self, path = None, Weights=None, SupportVectors=None, KernelMatrix=None, Bias=None, accuracy=None):
         """

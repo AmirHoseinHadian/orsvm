@@ -141,13 +141,13 @@ class SVM(object):
     Attributes
     ----------
     kernel : str
-        Kernel name, can be one of: Legendre, Jacobi, Gegenbauer, Chebyshev.
+        Kernel name, can be one of: Legendre, Jacobi, Gegenbauer, Chebyshev , rbf.
     order : int
         Orthogonal kernel's order.
     T : float
-        The Transition order. 0<T<1. default is 1, which means transition to normal space (normalization) instead of transformation.
+        The Transition order. 0<T<=1. default is 1, which means transition to normal space (normalization) instead of transformation.
     KernelParam1 : float
-        First hyperparameter of the kernels for Jacobi and Gegenbauer.
+        First hyperparameter of the kernels for Jacobi ,Gegenbauer and rbf.
         Jacobi: KernelParam1 refers to psi, first hyperparameters of jacobi kernel. psi should be greater than -1.
         Gegenbauer: KernelParam1 refers to lambda, the hyperparameter of Gegenbauer kernel. lambda should be greater than -0.5.
         rbf : KernelParam1 refers to gamma, the hyperparameter of rbf kernel. gamma should be greater than zero.
@@ -196,13 +196,13 @@ class SVM(object):
         Parameters
         ----------
         kernel : str
-            Kernel name, can be one of: Legendre, Jacobi, Gegenbauer, Chebyshev.
+            Kernel name, can be one of: Legendre, Jacobi, Gegenbauer, Chebyshev , rbf.
         order : int
             Orthogonal kernel's order.
         T : float
-            The Transition order. 0<T<1. default is 1, which means transition to normal space (normalization) instead of transformation.
+            The Transition order. 0<T<=1. default is 1, which means transition to normal space (normalization) instead of transformation.
         KernelParam1 : float
-            First hyperparameter of the kernels for Jacobi and Gegenbauer
+            First hyperparameter of the kernels for Jacobi and Gegenbauer and rbf.
             Jacobi: KernelParam1 refers to psi, first hyperparameters of jacobi kernel. psi should be greater than -1.
             Gegenbauer: KernelParam1 refers to lambda, the hyperparameter of Gegenbauer kernel. lambda should be greater than -0.5.
             rbf : KernelParam1 refers to gamma, the hyperparameter of rbf kernel. gamma should be greater than zero.
@@ -433,16 +433,17 @@ class Model(object):
     Attributes
     ----------
     kernel : str , default is Chebyshev
-            Kernel name, can be one of: Legendre, Jacobi, Gegenbauer, Chebyshev.
+            Kernel name, can be one of: Legendre, Jacobi, Gegenbauer, Chebyshev , rbf.
     order: int
         Orthogonal kernel's order.
     T: float
-        the Transition order. 0<T<1. default is 1, which means transition to normal space (normalization) instead of transformation.
+        the Transition order. 0<T<=1. default is 1, which means transition to normal space (normalization) instead of transformation.
     KernelParam1 : float, optional
         Default is None.
-        First hyperparameter of the kernels for Jacobi and Gegenbauer.
+        First hyperparameter of the kernels for Jacobi, Gegenbauer , rbf.
         Jacobi: KernelParam1 refers to psi, first hyper parameters of jacobi kernel. psi should be greater than -1.
         Gegenbauer: KernelParam1 refers to lambda, the hyperparameter of Gegenbauer kernel. lambda should be greater than -0.5.
+        rbf : KernelParam1 refers to gamma, the hyperparameter of rbf kernel. gamma should be greater than zero.
     KernelParam2: float, optional
         Default is None.
         Second hyperparameter of the kernels for Jacobi.
@@ -487,16 +488,17 @@ class Model(object):
         Parameters
         ----------
         kernel : str , default is Chebyshev
-            Kernel name, can be one of: Legendre, Jacobi, Gegenbauer, Chebyshev.
+            Kernel name, can be one of: Legendre, Jacobi, Gegenbauer, Chebyshev , rbf.
         order: int
             Orthogonal kernel's order.
         T: float
-            the Transition order. 0<T<1. default is 1, which means transition to normal space (normalization) instead of transformation.
+            the Transition order. 0<T<=1. default is 1, which means transition to normal space (normalization) instead of transformation.
         KernelParam1 : float, optional
             Default is None.
-            First hyperparameter of the kernels for Jacobi and Gegenbauer.
+            First hyperparameter of the kernels for Jacobi and Gegenbauer , rbf.
             Jacobi: KernelParam1 refers to psi, first hyper parameters of jacobi kernel. psi should be greater than -1.
             Gegenbauer: KernelParam1 refers to lambda, the hyperparameter of Gegenbauer kernel. lambda should be greater than -0.5.
+             rbf : KernelParam1 refers to gamma, the hyperparameter of rbf kernel. gamma should be greater than zero.
         KernelParam2: float, optional
             Default is None.
             Second hyperparameter of the kernels for Jacobi.
@@ -567,15 +569,15 @@ class Model(object):
             logging.error("Kernel name is not valid!")
             sys.exit()
             
-        if (x_train.shape[0]!=y_train.shape[0]) :
+        if (x_train.shape[0]!=y_train.shape[0]) : # check whether x_train.shape is compatible with y_train.shape or not
             logging.error("x_train shape is not compatible with y_train shape!")
             sys.exit()
             
-        elif(x_train.shape[0] == 0 or y_train.shape[0] == 0 ) :
+        elif(x_train.shape[0] == 0 or y_train.shape[0] == 0 ) : # check whether n_sample = 0 or not
             logging.error(" Model can not fit with n_sample = 0 ")
             sys.exit()
             
-        if (self.T<=0 or self.T>1) :
+        if (self.T<=0 or self.T>1) : # check range of T
             logging.error(" T is out of range. T range is : 0 < T <=1 ")
             sys.exit()
         
@@ -632,11 +634,11 @@ class Model(object):
             float
                Accuracy_score.
         """
-        if (x_test.shape[0]!=y_test.shape[0]) :
+        if (x_test.shape[0]!=y_test.shape[0]) : # check whether x_train.shape is compatible with y_train.shape or not
             logging.error("x_test shape is not compatible with y_test shape!")
             sys.exit()
             
-        elif(x_test.shape[0] == 0 or y_test.shape[0] == 0) :
+        elif(x_test.shape[0] == 0 or y_test.shape[0] == 0) : # check whether n_sample = 0 or not
             logging.error(" Model can not predict with n_sample = 0 ")
             sys.exit()
         
@@ -679,7 +681,7 @@ class Model(object):
             numpy array
                 Kernel matrix for our custom kernel.
                 """
-        if (x.shape[0] == 0 or y.shape[0] == 0):
+        if (x.shape[0] == 0 or y.shape[0] == 0):  # check whether n_sample = 0 or not
             logging.error(" Kernel matrix can not be computed with n_sample = 0 ")
             sys.exit()
         n_samples_x, n_features_x = x.shape
@@ -726,7 +728,7 @@ class Model(object):
                     K[i, j] = kernel_ins.kernel(transformed_x[i], transformed_y[j])
             return K
                                                  
-        else:
+        else: # check the validity of kernel name
             logging.error("Kernel name is not valid")
             sys.exit()
 
@@ -774,7 +776,8 @@ class Model(object):
         status = None
         support_vector_labels = None
         support_multipliers = None
-
+        
+         # set support_multipliers and support_vector_labels if they are not Nonetype
         if(self.OrsvmModel is not None) :
             status = self.OrsvmModel.solution_status
             if(self.OrsvmModel.support_multipliers is not None) :
@@ -846,7 +849,7 @@ def LoadJason(path):
             OutputDict = json.load(openfile)
 
         """
-         convert support vectors, weights , kernel matrix to their original type (numpy array)
+         convert support vectors, weights , kernel matrix , support multipliers and support vector labels to their original type (numpy array)
         """
         if isinstance(OutputDict["support vectors"], list):
             OutputDict["support vectors"] = np.array(OutputDict["support vectors"])
@@ -890,7 +893,7 @@ def PredictWithJson(path, X_test, y_test) :
     float
        Accuracy_score.
     """
-    if (X_test.shape[0] == 0 or y_test.shape[0] == 0):
+    if (X_test.shape[0] == 0 or y_test.shape[0] == 0): # check whether n_sample = 0 or not
         logging.error(" Model can not predict with n_sample = 0 ")
         sys.exit()
 
@@ -915,6 +918,9 @@ def PredictWithJson(path, X_test, y_test) :
     """
 
     orsvmModel = SVM(kernel, order, T, kernelParam1, kernelParam2, SupportVectorDeterminer, form, C, noise)
+    """
+    Check whether support multipliers , support vectors and support vector labels are Nonetype or not
+    """
     if(OutputDict["support multipliers"] is None) :
         logging.error('Model can not predict with support multipliers of type None ')
         sys.exit()
@@ -956,7 +962,7 @@ def PredictWithJson(path, X_test, y_test) :
         return accuracy
 
 
-
+    # check the validity of kernel name
     else:
         logging.error("Kernel name is not valid")
         sys.exit()

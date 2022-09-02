@@ -636,7 +636,7 @@ class Model(object):
             logging.error("x_test shape is not compatible with y_test shape!")
             sys.exit()
             
-        elif(x_test.shape[0] == 0 or y_test.shape[0) :
+        elif(x_test.shape[0] == 0 or y_test.shape[0] == 0) :
             logging.error(" Model can not predict with n_sample = 0 ")
             sys.exit()
         

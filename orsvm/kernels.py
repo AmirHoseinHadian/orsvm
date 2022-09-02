@@ -6,7 +6,7 @@ logging.basicConfig(level=logging.DEBUG, format='%(asctime)s:%(levelname)s:%(mes
 
 class Chebyshev(object):
     """
-    Chebyshev kernel class, containing all functions required to compute the chebyshev kernel fucntion.
+    Chebyshev kernel class, containing all functions required to compute the chebyshev kernel function.
 
     Attributes
     ----------
@@ -15,7 +15,7 @@ class Chebyshev(object):
     name : str , default is Chebyshev
         Kernel's name.
     form : Char
-        Choose how the Chebyshev kernel to be used wether explicit or recursive.
+        Choose how the Chebyshev kernel to be used whether explicit or recursive.
         Only is applicable to Chebyshev kernel, for other kernels if passed, will be ignored.
 
     Methods
@@ -23,7 +23,7 @@ class Chebyshev(object):
     GTn(x, n)
         Vectorized method of calculating chebsyhev polynomials terms.
     kernel(x, y)
-        Kernel fucntion to calculate the cheybshev kernel.
+        Kernel function to calculate the cheybshev kernel.
     """
     def __init__(self, order, form):
         """
@@ -47,7 +47,7 @@ class Chebyshev(object):
         """
         Compute the chebsyhev polynomial terms. 
         GTn refers to Generalized form of nth Term of the chebyshev polynomial. 
-        By Generalized, we mean the vectorial multiplication instead of elementwise.
+        By Generalized, we mean the vectorized multiplication instead of elementwise.
 
         Parameters
         ----------
@@ -80,7 +80,7 @@ class Chebyshev(object):
             except:
                 sys.exit("order must be equal or greater than 0")
         else :
-            logging.error('The oarameter form can only be "r" for recursive or "e" for the explicit equation implementation of the chebyshev kernel!')
+            logging.error('The parameter form can only be "r" for recursive or "e" for the explicit equation implementation of the chebyshev kernel!')
             sys.exit()
 
     def kernel(self, x, y):
@@ -117,7 +117,7 @@ class Chebyshev(object):
 
 class Legendre(object):
     """
-    Legendre kernel class, containing all functions required to compute the Legendre kernel fucntion.
+    Legendre kernel class, containing all functions required to compute the Legendre kernel function.
 
     Attributes
     ----------
@@ -169,7 +169,7 @@ class Legendre(object):
                 return 1
             return 0
         except:
-            sys.exit("order must be equal or grater then 0")
+            sys.exit("order must be equal or greater than 0")
 
     def kernel(self, x, y):
         """
@@ -269,7 +269,7 @@ class Gegenbauer(object):
                 return ((2 * (n - 1 + self.Lambda) / n * x * self.GegenbauerTerm(x, n - 1)) - ( ((n + (2 * self.Lambda) - 2) / n) * self.GegenbauerTerm(x, n - 2)))
             return 0
         except:
-            sys.exit("order must be equal or grater then 0")
+            sys.exit("order must be equal or greater than 0")
 
     def GegenbauerWeight(self, x, y):
             """
@@ -295,7 +295,7 @@ class Gegenbauer(object):
 
     def GegenbauerScale(self, n):
         """
-        The scale fucntion to prevent computational difficulties of the Gegenbauer kernel.
+        The scale function to prevent computational difficulties of the Gegenbauer kernel.
 
         Parameters
         ----------
@@ -352,10 +352,10 @@ class Gegenbauer(object):
 
 class Jacobi(object):
     """
-    Jacobi kernel class, containing all functions required to compute the Jacobi kernel fucntion.
-    For sake of simplicity and acording to the most well-known resources, teh main computation process has been 
+    Jacobi kernel class, containing all functions required to compute the Jacobi kernel function.
+    For sake of simplicity and according to the most well-known resources, teh main computation process has been 
     splitted to multiple functions, the An(n),Bn(n),Cn(n) functions
-     are directly used in JacobiTerm fucntion.
+     are directly used in JacobiTerm function.
 
     Attributes
     ----------
@@ -375,13 +375,13 @@ class Jacobi(object):
     Methods
     -------
     An(n)
-        Use in JacobiTerm for calculating Jacobi Jacobi polynomilas.
+        Use in JacobiTerm for calculating Jacobi Jacobi polynomials.
     Bn(n)
-        Use in JacobiTerm for calculating Jacobi Jacobi polynomilas.
+        Use in JacobiTerm for calculating Jacobi Jacobi polynomials.
     Cn(n)
-        Use in JacobiTerm for calculating Jacobi Jacobi polynomilas.
+        Use in JacobiTerm for calculating Jacobi Jacobi polynomials.
     JacobiTerm(n, x)
-        Use in kernel to calculate the jacobi polynimials.
+        Use in kernel to calculate the jacobi polynomials.
     weight(x, z)
         Use in kernel to calculate the Jacobi kernel weight.
     kernel(x, z)
@@ -414,7 +414,7 @@ class Jacobi(object):
 
     def An(self, n):
         """
-       Used in JacobiTerm for calculating Jacobi Jacobi polynomilas.
+       Used in JacobiTerm for calculating Jacobi Jacobi polynomials.
 
        Parameters
        ----------
@@ -430,7 +430,7 @@ class Jacobi(object):
 
     def Bn(self, n):
         """
-        Used in JacobiTerm to calculate Jacobi polynomilas.
+        Used in JacobiTerm to calculate Jacobi polynomials.
 
         Parameters
         ----------
@@ -499,7 +499,7 @@ class Jacobi(object):
 
     def kernel(self, x, y):
         """
-        Calculate the Jacobi kenrel fucntion for given inputs.
+        Calculate the Jacobi kenrel function for given inputs.
 
         Parameters
         ----------
@@ -544,7 +544,7 @@ class RBF(object) :
     Attributes
     ----------
     gamma : float
-        Hyperparameter of rbf kernel.
+        Hyperparameter of rbf kernel.gamma should be greater than zero.
     """
 
     def __init__(self, gamma ):

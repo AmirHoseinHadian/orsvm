@@ -547,7 +547,7 @@ class RBF(object) :
         Hyperparameter of rbf kernel.gamma should be greater than zero.
     """
 
-    def __init__(self, gamma ):
+    def __init__(self, gamma = 0.001):
         """
         Constructor for rbf class.
         Attributes
@@ -571,6 +571,13 @@ class RBF(object) :
         float
             Calculated kernel for x , y.
         """
+        if (self.gamma is None) :
+                self.gamma = 0.001
+        
+        if (self.gamma <=0 ) :
+            logging.error("gamma must be equal or greater than 0")
+            sys.exit()
+                
         x_norm = np.sum(np.power(x, 2))  # calculate norm of x
         y_norm = np.sum(np.power(y, 2))  # calculate norm of y
         result = np.exp(-self.gamma * (x_norm + y_norm - 2 * np.dot(y, x.T)))  # calculate kernel result

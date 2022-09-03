@@ -389,7 +389,7 @@ class Jacobi(object):
     """
 
 
-    def __init__(self, psi, omega, order=3, noise=0.1):
+    def __init__(self, psi = -0.8, omega = 0.2, order=3, noise=0.1):
         """
         Constructor for Jacobi class.
 
@@ -515,6 +515,12 @@ class Jacobi(object):
         if (self.order <0) :
             logging.error("order must be equal or greater than 0")
             sys.exit()
+        
+        if(self.psi is None) :
+            self.psi = -0.8
+            
+        if(self.omega is None) :
+            self.omega = 0.2
             
         if(self.psi<= -1) :
             logging.error("** Error: hyperparamter invalid range! For the Jacobi kernel function:  -1< Kernel Parameter1 ")

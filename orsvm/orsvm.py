@@ -581,7 +581,7 @@ class Model(object):
             logging.error(" T is out of range. T range is : 0 < T <=1 ")
             sys.exit()
             
-        if (self.C < 0) :
+        if (self.C is not None and self.C < 0) :
             logging.error(" C is out of range. C must be greater than 0 ")
             sys.exit()
         

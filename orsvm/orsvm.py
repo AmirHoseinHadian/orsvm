@@ -569,6 +569,15 @@ class Model(object):
             logging.error("Kernel name is not valid!")
             sys.exit()
             
+        if(y_train.dtype != 'int64') :
+            logging.error("Y_train type should be int!")
+            sys.exit()
+        
+        
+        if(x_train.dtype == 'object') :
+            logging.error("Input X must just contain float and int column! ")
+            sys.exit()
+            
         if (x_train.shape[0]!=y_train.shape[0]) : # check whether x_train.shape is compatible with y_train.shape or not
             logging.error("x_train shape is not compatible with y_train shape!")
             sys.exit()
@@ -638,6 +647,15 @@ class Model(object):
             float
                Accuracy_score.
         """
+        if(y_test.dtype != 'int64') :
+            logging.error("Y_test type should be int!")
+            sys.exit()
+        
+        
+        if(x_test.dtype == 'object') :
+            logging.error("Input X must just contain float and int column! ")
+            sys.exit()
+            
         if (x_test.shape[0]!=y_test.shape[0]) : # check whether x_train.shape is compatible with y_train.shape or not
             logging.error("x_test shape is not compatible with y_test shape!")
             sys.exit()

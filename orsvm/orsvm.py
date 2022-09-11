@@ -361,7 +361,7 @@ class SVM(object):
             logging.info("** solution status: %s", solution['status'])
         elif np.all(np.linalg.eigvals(K) >= 0) == False:
             logging.warning("A convex kernel matrix is not formed!")
-            logging.warning("** solution status: %s", solution['status'])
+            logging.info("** solution status: %s", solution['status'])
 
         """
         If log is True some information about support multipliers and the solution of the convex equation will be logged

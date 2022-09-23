@@ -565,8 +565,12 @@ class Model(object):
         """
         check whether kernel name is valid or not
         """
-        if self.Kernel != "legendre" and self.Kernel != "jacobi" and self.Kernel != "gegenbauer" and self.Kernel != "chebyshev" and self.Kernel != "rbf": 
+        if (self.Kernel != "legendre" and self.Kernel != "jacobi" and self.Kernel != "gegenbauer" and self.Kernel != "chebyshev" and self.Kernel != "rbf"): 
             logging.error("Kernel name is not valid!")
+            sys.exit()
+            
+        if(x_train.shape[0] == 0 or y_train.shape[0] == 0 ) : # check whether n_sample = 0 or not
+            logging.error(" Model can not fit with n_sample = 0 ")
             sys.exit()
             
         if(y_train.dtype != 'int64') :
@@ -581,11 +585,7 @@ class Model(object):
         if (x_train.shape[0]!=y_train.shape[0]) : # check whether x_train.shape is compatible with y_train.shape or not
             logging.error("x_train shape is not compatible with y_train shape!")
             sys.exit()
-            
-        elif(x_train.shape[0] == 0 or y_train.shape[0] == 0 ) : # check whether n_sample = 0 or not
-            logging.error(" Model can not fit with n_sample = 0 ")
-            sys.exit()
-            
+                       
         if (self.T<=0 or self.T>1) : # check range of T
             logging.error(" T is out of range. T range is : 0 < T <=1 ")
             sys.exit()
@@ -647,6 +647,10 @@ class Model(object):
             float
                Accuracy_score.
         """
+        if(x_test.shape[0] == 0 or y_test.shape[0] == 0) : # check whether n_sample = 0 or not
+            logging.error(" Model can not predict with n_sample = 0 ")
+            sys.exit()
+            
         if(y_test.dtype != 'int64') :
             logging.error("Y_test type should be int!")
             sys.exit()
@@ -660,9 +664,6 @@ class Model(object):
             logging.error("x_test shape is not compatible with y_test shape!")
             sys.exit()
             
-        elif(x_test.shape[0] == 0 or y_test.shape[0] == 0) : # check whether n_sample = 0 or not
-            logging.error(" Model can not predict with n_sample = 0 ")
-            sys.exit()
         
         y_unique_values = np.unique(y_test)  # get unique labels in y_test
 

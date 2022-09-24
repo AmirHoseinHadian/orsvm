@@ -843,6 +843,7 @@ class Model(object):
             try:
                 with open(path, "w") as OutFile:
                     json.dump(OutputDict, OutFile)
+                    OutFile.close()
                 logging.info("Results saved successfully")
 
             except FileNotFoundError:
@@ -960,7 +961,10 @@ def PredictWithJson(path, X_test, y_test) :
     orsvmModel.support_vector_labels = OutputDict['support vector labels']
 
     obj = Model(kernel=kernel, order=order, KernelParam1=kernelParam1, KernelParam2=kernelParam2, T=T, noise=noise ,orsvmModel=orsvmModel) # create an object of Model class with proper parameters
-
+    
+    if (orsvmModel.support_vectors.shape[1] != X_test.shape[1]) :
+        logging.error('The model can not make predictions on a dataset that is different from the dataset it was fitted on')
+        sys.exit()
 
     if kernel == 'chebyshev':
         kernelInstance = Chebyshev(order, form)  # making kernel instance

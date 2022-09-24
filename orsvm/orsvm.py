@@ -32,6 +32,9 @@ def Transform(x, T=1):
     Numpy Array         Normalized/Transformed data-set.
 
     """
+    if (T <= 0 or T > 1):  # check range of T
+        logging.error(" T is out of range. T range is : 0 < T <=1 ")
+        sys.exit()
     min = np.min(x)  # min of x
     max = np.max(x)  # max of x
     new_x = [2 * (((p - min) / (max - min)) ** (T)) - 1 for p in x]  # transform/normalize x and make new list

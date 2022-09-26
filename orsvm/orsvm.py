@@ -565,27 +565,27 @@ class Model(object):
             object
                 Kernel instance.
         """
-        """
-        check whether kernel name is valid or not
-        """
+        
+        # raise error when kernel name is not valid
+        
         if (self.Kernel != "legendre" and self.Kernel != "jacobi" and self.Kernel != "gegenbauer" and self.Kernel != "chebyshev" and self.Kernel != "rbf"): 
             logging.error("Kernel name is not valid!")
             sys.exit()
             
-        if(x_train.shape[0] == 0 or y_train.shape[0] == 0 ) : # check whether n_sample = 0 or not
+        if(x_train.shape[0] == 0 or y_train.shape[0] == 0 ) : # raise error when x_train or y_train is empty
             logging.error(" Model can not fit with n_sample = 0 ")
             sys.exit()
             
-        if(y_train.dtype != 'int64') :
+        if(y_train.dtype != 'int64') : # raise error when y_train type is not int64
             logging.error("Y_train type should be int!")
             sys.exit()
         
         
-        if(x_train.dtype == 'object') :
+        if(x_train.dtype == 'object') : # raise error when x_train contains non-float or non-int columns
             logging.error("Input X must just contain float and int column! ")
             sys.exit()
             
-        if (x_train.shape[0]!=y_train.shape[0]) : # check whether x_train.shape is compatible with y_train.shape or not
+        if (x_train.shape[0]!=y_train.shape[0]) : # raise error when x_train.shape[0] is not equal with y_train.shape[0]
             logging.error("x_train shape is not compatible with y_train shape!")
             sys.exit()
                        
@@ -593,7 +593,7 @@ class Model(object):
             logging.error(" T is out of range. T range is : 0 < T <=1 ")
             sys.exit()
             
-        if (self.C is not None and self.C < 0) :
+        if (self.C is not None and self.C < 0) : # raise error when C is negative.Possible values: 10, 100, 1000 ...
             logging.error(" C is out of range. C must be greater than 0 ")
             sys.exit()
         
@@ -650,20 +650,20 @@ class Model(object):
             float
                Accuracy_score.
         """
-        if(x_test.shape[0] == 0 or y_test.shape[0] == 0) : # check whether n_sample = 0 or not
+        if(x_test.shape[0] == 0 or y_test.shape[0] == 0) : # raise error when x_test or y_test is empty
             logging.error(" Model can not predict with n_sample = 0 ")
             sys.exit()
             
-        if(y_test.dtype != 'int64') :
+        if(y_test.dtype != 'int64') : # raise error when y_test.type is not int64
             logging.error("Y_test type should be int!")
             sys.exit()
         
         
-        if(x_test.dtype == 'object') :
+        if(x_test.dtype == 'object') : # raise error when x_test contain non-float or non-int columns
             logging.error("Input X must just contain float and int column! ")
             sys.exit()
             
-        if (x_test.shape[0]!=y_test.shape[0]) : # check whether x_train.shape is compatible with y_train.shape or not
+        if (x_test.shape[0]!=y_test.shape[0]) :# raise error when x_test.shape[0] is not equal with y_test.shape[0]
             logging.error("x_test shape is not compatible with y_test shape!")
             sys.exit()
             
@@ -707,7 +707,7 @@ class Model(object):
             numpy array
                 Kernel matrix for our custom kernel.
                 """
-        if (x.shape[0] == 0 or y.shape[0] == 0):  # check whether n_sample = 0 or not
+        if (x.shape[0] == 0 or y.shape[0] == 0):  # raise error when x or y is empty
             logging.error(" Kernel matrix can not be computed with n_sample = 0 ")
             sys.exit()
         n_samples_x, n_features_x = x.shape
@@ -754,7 +754,7 @@ class Model(object):
                     K[i, j] = kernel_ins.kernel(transformed_x[i], transformed_y[j])
             return K
                                                  
-        else: # check the validity of kernel name
+        else: # raise error when kernel name is not valid
             logging.error("Kernel name is not valid")
             sys.exit()
 
@@ -803,7 +803,9 @@ class Model(object):
         support_vector_labels = None
         support_multipliers = None
         
-         # set support_multipliers and support_vector_labels if they are not Nonetype
+        """
+        set support_multipliers and support_vector_labels if they are not Nonetype and if they are not empty
+        """
         if(self.OrsvmModel is not None) :
             status = self.OrsvmModel.solution_status
             if(self.OrsvmModel.support_multipliers is not None) :
@@ -878,19 +880,19 @@ def LoadJason(path):
         """
          convert support vectors, weights , kernel matrix , support multipliers and support vector labels to their original type (numpy array)
         """
-        if isinstance(OutputDict["support vectors"], list):
+        if isinstance(OutputDict["support vectors"], list): # convert support vectors to numpy array if it's type is list
             OutputDict["support vectors"] = np.array(OutputDict["support vectors"])
 
-        if isinstance(OutputDict["weights"], list):
+        if isinstance(OutputDict["weights"], list): # convert weights to numpy array if it's type is list
             OutputDict["weights"] = np.array(OutputDict["weights"])
 
-        if isinstance(OutputDict['kernel matrix'], list):
+        if isinstance(OutputDict['kernel matrix'], list): # convert kernel matrix to numpy array if it's type is list
             OutputDict['kernel matrix'] = np.array(OutputDict['kernel matrix'])
                                                   
-        if isinstance(OutputDict['support multipliers'] ,list) :
+        if isinstance(OutputDict['support multipliers'] ,list) : # convert support multipliers to numpy array if it's type is list
             OutputDict['support multipliers'] = np.array(OutputDict['support multipliers'])
 
-        if isinstance(OutputDict['support vector labels'] ,list) :
+        if isinstance(OutputDict['support vector labels'] ,list) : # convert support vector labels to numpy array if it's type is list
             OutputDict['support vector labels'] = np.array(OutputDict['support vector labels'])
 
 
@@ -920,7 +922,7 @@ def PredictWithJson(path, X_test, y_test) :
     float
        Accuracy_score.
     """
-    if (X_test.shape[0] == 0 or y_test.shape[0] == 0): # check whether n_sample = 0 or not
+    if (X_test.shape[0] == 0 or y_test.shape[0] == 0): # raise error when x_test or y_test is empty
         logging.error(" Model can not predict with n_sample = 0 ")
         sys.exit()
 
@@ -948,13 +950,13 @@ def PredictWithJson(path, X_test, y_test) :
     """
     Check whether support multipliers , support vectors and support vector labels are Nonetype or not
     """
-    if(OutputDict["support multipliers"] is None) :
+    if(OutputDict["support multipliers"] is None) : # raise error if support multipliers are None
         logging.error('Model can not predict with support multipliers of type None ')
         sys.exit()
-    if(OutputDict['support vectors'] is None) :
+    if(OutputDict['support vectors'] is None) : # raise error if support vectors are None
         logging.error('Model can not predict with support vectors of type None ')
         sys.exit()
-    if(OutputDict['support vector labels'] is None) :
+    if(OutputDict['support vector labels'] is None) : # raise error if support vectors labels are None
         logging.error('Model can not predict with support vector labels of type None ')
         sys.exit()                                              
                                                   
@@ -965,7 +967,7 @@ def PredictWithJson(path, X_test, y_test) :
 
     obj = Model(kernel=kernel, order=order, KernelParam1=kernelParam1, KernelParam2=kernelParam2, T=T, noise=noise ,orsvmModel=orsvmModel) # create an object of Model class with proper parameters
     
-    if (orsvmModel.support_vectors.shape[1] != X_test.shape[1]) :
+    if (orsvmModel.support_vectors.shape[1] != X_test.shape[1]) :  # raise error when the input dataset is different from the dataset model was fitted on
         logging.error('The model can not make predictions on a dataset that is different from the dataset it was fitted on')
         sys.exit()
 
@@ -992,7 +994,7 @@ def PredictWithJson(path, X_test, y_test) :
         return accuracy
 
 
-    # check the validity of kernel name
+    # raise error when kernel name is not valid
     else:
         logging.error("Kernel name is not valid")
         sys.exit()

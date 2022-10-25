@@ -851,8 +851,9 @@ class Model(object):
                     OutFile.close()
                 logging.info("Results saved successfully")
 
-            except FileNotFoundError:
+            except :
                 logging.error("Path to save output not found!")
+                sys.exit()
 
             return None
 

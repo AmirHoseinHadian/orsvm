@@ -968,9 +968,7 @@ def PredictWithJson(path, X_test, y_test) :
 
     obj = Model(kernel=kernel, order=order, KernelParam1=kernelParam1, KernelParam2=kernelParam2, T=T, noise=noise ,orsvmModel=orsvmModel) # create an object of Model class with proper parameters
     
-    if (orsvmModel.support_vectors.shape[1] != X_test.shape[1]) :  # raise error when the input dataset is different from the dataset model was fitted on
-        logging.error('The model can not make predictions on a dataset that is different from the dataset it was fitted on')
-        sys.exit()
+  
 
     if kernel == 'chebyshev':
         kernelInstance = Chebyshev(order, form)  # making kernel instance

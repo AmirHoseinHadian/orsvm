@@ -132,7 +132,7 @@ def SupportMultipliers(array, n, order='asc'):
         logging.info("** support vector threshold: 10^%s", sv_treshold)
         support_multipliers = array > 10 ** +sv_treshold
     else:
-        logging.error('support vector determiner is not valid')
+        logging.error('** Support vector determiner is not valid')
         sys.exit()
     return support_multipliers
 
@@ -360,10 +360,10 @@ class SVM(object):
         
         
         if np.all(np.linalg.eigvals(K) >= 0) == True:
-            logging.info("Kenrel matrix is convex")
+            logging.info("** Kenrel matrix is convex")
             logging.info("** solution status: %s", solution['status'])
         elif np.all(np.linalg.eigvals(K) >= 0) == False:
-            logging.warning("A convex kernel matrix is not formed!")
+            logging.warning("** A convex kernel matrix is not formed!")
             logging.info("** solution status: %s", solution['status'])
 
         """
@@ -378,7 +378,7 @@ class SVM(object):
             New_matrix = np.hstack((np.transpose(G), New_matrix))
             logging.info("** [P, A_transpose, G_transpose] condition value: %s", np.linalg.cond(New_matrix))
             logging.info("** Rank A is: %s Rank [P, A_transpose, G_transpose] is: %s", np.linalg.matrix_rank(A),np.linalg.matrix_rank(New_matrix))
-            logging.info("kernel matrix is positive semidefinite : %s" ,np.all(np.linalg.eigvals(K) >= 0))
+            logging.info("** Kernel matrix is positive semidefinite : %s" ,np.all(np.linalg.eigvals(K) >= 0))
             logging.info("** %s support vectors are selected out of %s points", len(self.support_vectors), n_samples)
 
         """
@@ -569,32 +569,32 @@ class Model(object):
         # raise error when kernel name is not valid
         
         if (self.Kernel != "legendre" and self.Kernel != "jacobi" and self.Kernel != "gegenbauer" and self.Kernel != "chebyshev" and self.Kernel != "rbf"): 
-            logging.error("Kernel name is not valid!")
+            logging.error("** Kernel name is not valid!")
             sys.exit()
             
         if(x_train.shape[0] == 0 or y_train.shape[0] == 0 ) : # raise error when x_train or y_train is empty
-            logging.error(" Model can not fit with n_sample = 0 ")
+            logging.error("** Model can not fit with n_sample = 0 ")
             sys.exit()
             
         if(y_train.dtype != 'int64') : # raise error when y_train type is not int64
-            logging.error("Y_train type should be int!")
+            logging.error("** Y_train type should be int!")
             sys.exit()
         
         
         if(x_train.dtype == 'object') : # raise error when x_train contains non-float or non-int columns
-            logging.error("Input X must just contain float and int column! ")
+            logging.error("** Input X must just contain float and int column! ")
             sys.exit()
             
         if (x_train.shape[0]!=y_train.shape[0]) : # raise error when x_train.shape[0] is not equal with y_train.shape[0]
-            logging.error("x_train shape is not compatible with y_train shape!")
+            logging.error("** x_train shape is not compatible with y_train shape!")
             sys.exit()
                        
         if (self.T<=0 or self.T>1) : # check range of T
-            logging.error(" T is out of range. T range is : 0 < T <=1 ")
+            logging.error("** T is out of range. T range is : 0 < T <=1 ")
             sys.exit()
             
         if (self.C is not None and self.C < 0) : # raise error when C is negative.Possible values: 10, 100, 1000 ...
-            logging.error(" C is out of range. C must be greater than 0 ")
+            logging.error("** C is out of range. C must be greater than 0 ")
             sys.exit()
         
         y_unique_values = np.unique(y_train)  # get unique labels in y_train
@@ -604,7 +604,7 @@ class Model(object):
             
         #TODO
         elif(len(y_unique_values) > 2) :
-            logging.info("Multiclassification")
+            logging.info("** Multiclassification")
             sys.exit()
             
         """
@@ -651,20 +651,20 @@ class Model(object):
                Accuracy_score.
         """
         if(x_test.shape[0] == 0 or y_test.shape[0] == 0) : # raise error when x_test or y_test is empty
-            logging.error(" Model can not predict with n_sample = 0 ")
+            logging.error("** Model can not predict with n_sample = 0 ")
             sys.exit()
             
         if(y_test.dtype != 'int64') : # raise error when y_test.type is not int64
-            logging.error("Y_test type should be int!")
+            logging.error("** Y_test type should be int!")
             sys.exit()
         
         
         if(x_test.dtype == 'object') : # raise error when x_test contain non-float or non-int columns
-            logging.error("Input X must just contain float and int column! ")
+            logging.error("** Input X must just contain float and int column! ")
             sys.exit()
             
         if (x_test.shape[0]!=y_test.shape[0]) :# raise error when x_test.shape[0] is not equal with y_test.shape[0]
-            logging.error("x_test shape is not compatible with y_test shape!")
+            logging.error("** x_test shape is not compatible with y_test shape!")
             sys.exit()
             
         
@@ -675,7 +675,7 @@ class Model(object):
         
         #TODO
         elif (len(y_unique_values) > 2):
-            logging.info("Multiclassification")
+            logging.info("** Multiclassification")
             sys.exit()
             
         x_test = Transform(x_test, self.T)  # Transform the test-set into new space
@@ -708,7 +708,7 @@ class Model(object):
                 Kernel matrix for our custom kernel.
                 """
         if (x.shape[0] == 0 or y.shape[0] == 0):  # raise error when x or y is empty
-            logging.error(" Kernel matrix can not be computed with n_sample = 0 ")
+            logging.error("** Kernel matrix can not be computed with n_sample = 0 ")
             sys.exit()
         n_samples_x, n_features_x = x.shape
         n_samples_y, n_features_y = y.shape
@@ -755,7 +755,7 @@ class Model(object):
             return K
                                                  
         else: # raise error when kernel name is not valid
-            logging.error("Kernel name is not valid")
+            logging.error("** Kernel name is not valid")
             sys.exit()
 
     def SaveToJason(self, path = None, Weights=None, SupportVectors=None, KernelMatrix=None, Bias=None, accuracy=None):
@@ -849,10 +849,10 @@ class Model(object):
                 with open(path, "w") as OutFile:
                     json.dump(OutputDict, OutFile)
                     OutFile.close()
-                logging.info("Results saved successfully")
+                logging.info("** Results saved successfully")
 
             except :
-                logging.error("Path to save output not found!")
+                logging.error("** Path to save output not found!")
                 sys.exit()
 
             return None
@@ -898,7 +898,7 @@ def LoadJason(path):
 
 
     except FileNotFoundError:
-        logging.error("Path to load output file not found!")
+        logging.error("** Path to load output file not found!")
         sys.exit()
 
     return OutputDict
@@ -924,7 +924,7 @@ def PredictWithJson(path, X_test, y_test) :
        Accuracy_score.
     """
     if (X_test.shape[0] == 0 or y_test.shape[0] == 0): # raise error when x_test or y_test is empty
-        logging.error(" Model can not predict with n_sample = 0 ")
+        logging.error("** Model can not predict with n_sample = 0 ")
         sys.exit()
 
     """
@@ -952,13 +952,13 @@ def PredictWithJson(path, X_test, y_test) :
     Check whether support multipliers , support vectors and support vector labels are Nonetype or not
     """
     if(OutputDict["support multipliers"] is None) : # raise error if support multipliers are None
-        logging.error('Model can not predict with support multipliers of type None ')
+        logging.error('** Model can not predict with support multipliers of type None ')
         sys.exit()
     if(OutputDict['support vectors'] is None) : # raise error if support vectors are None
-        logging.error('Model can not predict with support vectors of type None ')
+        logging.error('** Model can not predict with support vectors of type None ')
         sys.exit()
     if(OutputDict['support vector labels'] is None) : # raise error if support vectors labels are None
-        logging.error('Model can not predict with support vector labels of type None ')
+        logging.error('** Model can not predict with support vector labels of type None ')
         sys.exit()                                              
                                                   
                                                   
@@ -995,6 +995,6 @@ def PredictWithJson(path, X_test, y_test) :
 
     # raise error when kernel name is not valid
     else:
-        logging.error("Kernel name is not valid")
+        logging.error("** Kernel name is not valid")
         sys.exit()
 

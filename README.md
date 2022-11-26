@@ -2,7 +2,7 @@
 
 # ORSVM 
 
-ORSVM is a free software package which provides a SVM classifier with  some novel orthogonal polynomial kernels.
+`ORSVM` is a free software package which provides a SVM classifier with  some novel orthogonal polynomial kernels.
 This library provides a complete path of using the SVM classifier from normalization to calculation of SVM equation and the final evaluation.
 In order to classify the dataset with ORSVM, there is a need to normalize the dataset whether using normal or fractional kernels.
 ORSVM library needs numpy and cvxopt libraries to be installed. Arrays, matrices and linear algebraic functions have been used repeatedly from numpy and

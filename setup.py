@@ -15,10 +15,10 @@ setup(
     long_description=long_description,
     long_description_content_type='text/markdown',
     url='https://github.com/AmirHoseinHadian/orsvm',
-    author='Amir Hossein Hadian Rasenan, Sherwin Nedaei Janbesaraei, Amirreza Azmoon, Mohammad Akhavan',
+    author='Amir Hossein Hadian Rasenan, Sherwin Nedaei Janbesaraei, Amirreza Azmoon, Mohammad Akhavan, Shakiba Amirshahi',
     author_email='amir.h.hadian@gmail.com',
     classifiers=[
-	'Development Status :: 4 - Beta',	
+	'Development Status :: 5 - Production/Stable',	
         'Programming Language :: Python :: 3',
         'License :: OSI Approved :: MIT License',
         'Operating System :: OS Independent',

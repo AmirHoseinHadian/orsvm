@@ -10,9 +10,7 @@ ORSVM library needs numpy and cvxopt libraries to be installed. Arrays, matrices
  convex optimization. 
  For a comprehensive introduction to fractional orthogonal kernel function and the use cases in SVM, refer to [Learning with Fractional Orthogonal Kernel Classifiers in Support Vector Machines](https://link.springer.com/book/9789811965524) book.
  
-Learning with Fractional Orthogonal Kernel Classifiers in Support Vector Machines: https://link.springer.com/book/9789811965524
-
-A suitable guide on this package is available at http://cvxopt.org about installation and how to use.
+A suitable guide on `cvxopt` package is available at http://cvxopt.org about installation and how to use.
  
 
  ## Install

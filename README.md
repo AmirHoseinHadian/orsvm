@@ -8,7 +8,7 @@ In order to classify the dataset with ORSVM, there is a need to normalize the da
 ORSVM library needs numpy and cvxopt libraries to be installed. Arrays, matrices and linear algebraic functions have been used repeatedly from numpy and
  the heart of SVM algorithm which is finding the Support Vectors is done by use of a convex quadratic solver from cvxopt library which is in turn a free python package for 
  convex optimization. 
- For a comprehensive introduction to fractional orthogonal kernel function and the use cases in SVM, refer to `[Learning with Fractional Orthogonal Kernel Classifiers in Support Vector Machines]'(https://link.springer.com/book/9789811965524) book.
+ For a comprehensive introduction to fractional orthogonal kernel function and the use cases in SVM, refer to [Learning with Fractional Orthogonal Kernel Classifiers in Support Vector Machines](https://link.springer.com/book/9789811965524) book.
  
 Learning with Fractional Orthogonal Kernel Classifiers in Support Vector Machines: https://link.springer.com/book/9789811965524
 

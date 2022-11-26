@@ -9,9 +9,10 @@ ORSVM library needs numpy and cvxopt libraries to be installed. Arrays, matrices
  the heart of SVM algorithm which is finding the Support Vectors is done by use of a convex quadratic solver from cvxopt library which is in turn a free python package for 
  convex optimization. 
  For a comprehensive introduction to fractional orthogonal kernel function and the use cases in SVM, refer to `Learning with Fractional Orthogonal Kernel Classifiers in Support Vector Machines` book.
-*Learning with Fractional Orthogonal Kernel Classifiers in Support Vector Machines: https://link.springer.com/book/9789811965524
+ 
+Learning with Fractional Orthogonal Kernel Classifiers in Support Vector Machines: https://link.springer.com/book/9789811965524
 
-*A suitable guide on this package is available at http://cvxopt.org about installation and how to use.
+A suitable guide on this package is available at http://cvxopt.org about installation and how to use.
  
 
  ## Install

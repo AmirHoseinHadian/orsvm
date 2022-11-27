@@ -1,5 +1,7 @@
-![LOGO](docs/_static/identicons.png)
-
+![LOGO](docs/source/_static//identicons.png)
+![PyPI - License](https://img.shields.io/pypi/l/orsvm)
+![PyPI](https://img.shields.io/pypi/v/orsvm)
+![PyPI - Status](https://img.shields.io/pypi/status/orsvm)
 # ORSVM 
 
 `ORSVM` is a free software package which provides a SVM classifier with  some novel orthogonal polynomial kernels.

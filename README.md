@@ -1,4 +1,6 @@
 ![LOGO](docs/source/_static//identicons.png)
+
+
 ![PyPI - License](https://img.shields.io/pypi/l/orsvm)
 ![PyPI](https://img.shields.io/pypi/v/orsvm)
 ![PyPI - Status](https://img.shields.io/pypi/status/orsvm)

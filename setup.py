@@ -10,7 +10,7 @@ long_description = (here / 'README.md').read_text(encoding='utf-8')
 
 setup(
     name='orsvm', 
-    version='1.0.4',
+    version='1.0.5',
     description='SVM with Orthogonal Kernel functions of fractional order and normal',
     long_description=long_description,
     long_description_content_type='text/markdown',

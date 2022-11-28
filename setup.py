@@ -15,6 +15,7 @@ setup(
     long_description=long_description,
     long_description_content_type='text/markdown',
     url='https://github.com/AmirHoseinHadian/orsvm',
+    download_url = 'https://github.com/AmirHoseinHadian/orsvm/archive/refs/tags/v1.0.5.tar.gz'
     author='Amir Hossein Hadian Rasenan, Sherwin Nedaei Janbesaraei, Amirreza Azmoon, Mohammad Akhavan, Shakiba Amirshahi',
     author_email='amir.h.hadian@gmail.com',
     classifiers=[
